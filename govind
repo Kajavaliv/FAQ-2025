@@ -1,0 +1,1235 @@
+Q) What is synchronization?
+		Synchronization in java is the capability to control the access of multiple threads to any shared resource. In the Multithreading concept, multiple threads try to access the shared resources at a time to produce inconsistent results. The synchronization is necessary for reliable communication between threads.
+		This synchronization is implemented in Java with a concept called monitors
+
+Q) How many ways of creating threads?
+	There are two ways to create a thread:
+		By extending Thread class
+		By implementing Runnable interface.
+
+Q) What is the difference between wait and sleep?
+	Wait: Wait() method belongs to Object class.
+		  Wait() method releases lock during Synchronization.
+		  Wait() should be called only from Synchronized context.
+		  Wait() is not a static method.
+	Sleep: Sleep() method belongs to Thread class.
+		   Sleep() method does not release the lock on object during Synchronization.
+		   There is no need to call sleep() from Synchronized context.
+		   Sleep() is a static method. 
+Q) Why notify and wait methods are in Object class?
+	Synchronized is to provide mutual exclusion and ensuring thread safety of Java class like race condition while wait and notify are communication mechanism between two thread. 
+	2. Locks are made available on per Object basis, which is another reason wait and notify is declared in Object class rather then Thread class.
+	
+Q) What is yield in thread?
+	Whenever a thread calls java.lang.Thread.yield method gives hint to the thread scheduler that it is ready to pause its execution. The thread scheduler is free to ignore this hint
+Q) Thread communication will happen in java?
+	wait(): It tells the calling thread to give up the lock and go to sleep until some other thread enters the same monitor and calls notify().
+	notify(): It wakes up one single thread called wait() on the same object. It should be noted that calling notify() does not give up a lock on a resource.
+	notifyAll(): It wakes up all the threads called wait() on the same object.
+	JOIN : Thread.loin will communicate with other thread
+
+Q) What is mutual Exclusion/mutex ?
+	A mutex (or mutual exclusion) is the simplest type of synchronizer – it ensures that only one thread can execute the critical section of a computer program at a time.
+	To access a critical section, a thread acquires the mutex, then accesses the critical section, and finally releases the mutex.
+	As soon as a thread exits the critical section, another thread can enter the critical section
+	
+Q) What is semaphores?
+	we use semaphore in the thread synchronization. It is used to control access to a shared resource that uses a counter variable. Java also provides a Semaphore class that contains constructors and various methods to control access over the shared resource.
+	If counter > 0, access to shared resources is provided.
+	If counter = 0, access to shared resources is denied.
+
+Q) What is the difference between Runnable and callable interfaces?
+	Callable: A callable interface throws the checked exception and returns the result.
+			  This interface also contains a single, no-argument method, called call() method
+			  We can’t create a thread by passing callable as a parameter.
+			  Callable can return results. Callable’s call() method contains the “throws Exception” clause, so we can easily propagate checked exceptions further
+	Runnable: When an object implementing this interface is used to create a thread, starting the thread causes the object run method to be called in a separately executing thread.
+			  It represents a task in Java that is executed by Thread.
+			  There are two ways to start a new thread using Runnable, one is by implementing the Runnable interface and another one is by subclassing the Thread class.
+			  Runnable cannot return the result of computation which is essential if you are performing some computing task in another thread, and Runnable cannot throw checked exceptions.
+			  
+Q) Explain about the volatile key word?
+	A volatile keyword is used to modify the value of a variable by different threads. It is also used to make classes thread-safe. It means that multiple threads can use a method and instance of the classes at the same time without any problem.
+	
+Q) What is thread safety?
+	Thread safety is the avoidance of data races—situations in which data are set to either correct or incorrect values, depending upon the order in which multiple threads access and modify the data. When no sharing is intended, give each thread a private copy of the data
+
+Q) difference between execute and submit method in java
+	Execute :
+		This function executes the given command at some time in the future. The command may execute in a new thread, in a pooled thread, or in the calling thread, at the discretion of the Executor implementation. This method is a void method meaning it doesn’t return any function. Once the task is assigned in the execute() method, we won’t get any response and we can forget about the task.
+		This method is declared in the Executor interface.
+		This method can accept only runnable task.
+		This method has a return type of void.		
+		
+	Submit :
+		This function executes the given command at some time in the future. The command may execute in a new thread, in a pooled thread, or in the calling thread, at the discretion of the Executor implementation. Unlike the execute method, this method returns a future.
+		This method is declared in the ExecutorService interface.
+		This method can accept both runnable and callable tasks.
+		This method has a return type of Future.
+		
+Q) How to create Immutable class ?
+	The class must be declared as final so that child classes can’t be accessed.
+	Data members in the class must be declared private so that direct access is not allowed.
+	Data members in the class must be declared as final so that we can’t change the value of it after object creation.
+	A parameterized constructor should initialize all the fields performing a deep copy so that data members can’t be modified with an object reference.
+	Deep Copy of objects should be performed in the getter methods to return a copy rather than returning the actual object reference)
+
+Q) Why string is immutable class in java?
+	The String is immutable in Java because of the security, synchronization and concurrency, caching, and class loading. The reason of making string final is to destroy the immutability and to not allow others to extend it.
+
+Q) How to convert list to map in java?
+	Map<Integer, List<String> >
+            multimap = lt.stream()
+                           .collect(
+                               Collectors
+                                   .groupingBy(
+                                       Student::getId,
+                                       Collectors
+                                           .mapping(
+                                               Student::getName,
+                                               Collectors
+                                                   .toList())));
+
+Q)What are the stream terminal operators and intermediate operators in stream?
+	Intermediate operations:
+			filter,	map, flapMap, sorted,
+			peek, skip, limit
+	Terminal Operators:
+		forEach, count,  reduce,
+		collect,
+		anymatch,min,max, toarray
+		
+Q) What are the uses of Stream ?
+	Streams offer a more functional and declarative approach, enhancing code readability and often leading to concise and elegant solutions
+	Stream API is a way to express and process collections of objects.
+	Enable us to perform operations like filtering, mapping,reducing and sorting.
+	
+Q) Is serialization mandatory in java?
+	If pass any object through network yes
+	Serialization in Java allows us to convert an Object to stream that we can send over the network or save it as file or store in DB for later usage. Deserialization is the process of converting Object stream to actual Java Object to be used in our program.
+
+Q) How to deserialize the Object in java?
+	FileInputStream file = new FileInputStream(filename);
+            ObjectInputStream in = new ObjectInputStream(file);
+             
+            // Method for deserialization of object
+            object1 = (Demo)in.readObject();
+
+Q) How to serialize the object in java?
+	FileOutputStream file = new FileOutputStream(filename);
+            ObjectOutputStream out = new ObjectOutputStream(file);
+             
+            // Method for serialization of object
+            out.writeObject(object);
+ 
+
+Q) print the unique elements in list ?
+	List<Integer> UniqueNumbers
+            = Numbers.stream().distinct().collect(
+                Collectors.toList());
+	list.stream().filter(i->Collections.frequency(list,i)>1).collect(Collectors.toSet());
+				
+Q) print the non repeating characters from a string ?
+		for(int i = 0; i < str.length(); i++){
+            arr[str.charAt(i)]++; 
+        }
+        System.out.println ("Non Repeating characters are");
+        for (int i = 0; i < 256; i++)
+        {
+            if (arr[i] == 1)
+            {
+                System.out.println((char)i);
+            }
+        }
+
+//// Using streams
+	"stress".chars(). mapToObj(c -> Character.valueOf((char)c))
+		.collect(Collectors.toSet()).forEach(s -> System. out. println(s));
+
+	input.chars()           // IntStream
+             .mapToObj(i -> Character.toLowerCase(Character.valueOf((char) i)))  // convert to lowercase & then to Character object Stream
+             .collect(Collectors.groupingBy(Function.identity(), LinkedHashMap::new, Collectors.counting())) // store in a LinkedHashMap with the count
+             .entrySet().stream()                       // EntrySet stream
+             .filter(entry -> entry.getValue() == 1L)   // extracts characters with a count of 1
+             .map(entry -> entry.getKey())              // get the keys of EntrySet
+             .findFirst().get(); 
+		
+Q) What is the interface and abstract class?
+	The Abstract class and Interface both are used to have abstraction. An abstract class contains an abstract keyword on the declaration whereas an Interface is a sketch that is used to implement a class.
+	
+	In java8 interface have default methods
+	
+Q) Find the number of occurrences of characters in string?
+	String str= "Communication";  
+	Map<String, Long> result = Arrays.stream(str.split("")).map(String::toLowerCase).collect(
+	Collectors.groupingBy(s -> s, LinkedHashMap::new, Collectors.counting()));  
+	System.out.println(result); 
+	
+Q) What is the difference between spring and hibernate?
+	Spring: Spring is useful for transaction management, aspect-oriented programming, and dependency injection.
+			Spring has a number of modules such as Spring core, Spring MVC, Spring Security, Spring JDBC & more.
+			Spring supports Hibernate and is known to provide different classes which are templates that contain the common code.
+			It allows you to follow the MVC architecture, and simplifies writing back-end as well as front-end code, providing clear demarcation simultaneously
+			This framework is a complete and modular framework for developing Enterprise Applications in Java.
+	Hibernate: This framework is an Object Relational Mapping tool specifically designed in a way that it promotes data persisting and retrieving 	from a database.
+			   It allows you to perform database transactions in the form of objects mapped to corresponding tables, using configuration XML files.
+			   Hibernate provides Object-Relational Persistence and Query service for applications.
+			   Hibernate provides a lot of feasibility while dealing with the database.
+			   
+Q) How to create custom exception in java?
+	public class WrongFileNameException extends Exception {  
+		public WrongFileNameException(String errorMessage) {  
+			super(errorMessage);  
+		}  
+	}  
+	
+Q) What is the heap and stack memory and difference between them and why stack memory is faster?
+	Stack : It’s a temporary memory allocation scheme where the data members are accessible only if the method( ) that contained them is currently running.
+			It allocates or de-allocates the memory automatically as soon as the corresponding method completes its execution.
+			We receive the corresponding error Java. lang. StackOverFlowError by JVM, If the stack memory is filled completely.
+			Stack memory allocation is considered safer as compared to heap memory allocation because the data stored can only be accessed by the owner thread.
+			Memory allocation and de-allocation are faster as compared to Heap-memory allocation.
+			Stack memory has less storage space as compared to Heap-memory.
+			Memory is allocated in a contiguous block.
+			Memory allocation automatic by compiler instructions.
+			Less cost
+			Easy implementation
+			Faster access time
+			Shortage of memory
+			Thread safe, data stored can only be accessed by the owner
+			Fixed size
+			linear data type structure
+			Static memory allocation is preferred in an array.
+			Small than heap memory.
+	Heap :
+			Memory is allocated in any random order.
+			Memory allocation Manual by the programmer.
+			More cost
+			Hard implementation
+			Slower access time
+			Memory fragmentation
+			Not Thread safe, data stored visible to all threads
+			Resizing possible
+			Hierarchical data type structure
+			Heap memory allocation is preferred in the linked list
+			Larger than stack memory.
+			
+Q) what is finally ? how to stop the finally block execution?	
+	Finally block is must be executable block. System.exit() is stop to execute the finally block
+	
+Q) Explain about the static keyword?
+	The static keyword is a non-access modifier in Java that is applicable for the following: 
+	Blocks :If you need to do the computation in order to initialize your static variables, you can declare a static block that gets executed exactly once, when the class is first loaded. 
+	Variables : When a variable is declared as static, then a single copy of the variable is created and shared among all objects at the class level. Static variables are, essentially, global variables. All instances of the class share the same static variable.
+	Methods : When a method is declared with the static keyword, it is known as the static method. The most common example of a static method is the main( ) method. As discussed above, Any static member can be accessed before any objects of its class are created, and without reference to any object. Methods declared as static have several restrictions: 
+	Classes : Use the static variable for the property that is common to all objects. For example, in class Student, all students share the same college name. Use static methods for changing static variables.
+	
+Q) How hash map works internally?
+	is basically an array of buckets (also known as bucket table of HashMap) where each bucket uses linked list to hold elements. A linked list is a list of nodes where each node contains a key-value pair.
+	In simple words, a bucket is a linked list of nodes where each node is an object of class Node<K,V>. The key of the node is used to obtain the hash value and this hash value is used to find the bucket from Bucket Table
+
+	
+	To improve the working of HashMap, Java 8 made updates to the internal implementation workflow. Once a certain threshold level is reached, the values are now automatically stored in a tree manner rather than a linked list
+	Threshold value :8
+	
+Q) Explain final,finally and finalize?
+	Final :
+			final (lowercase) is a reserved keyword in java. We can’t use it as an identifier, as it is reserved. We can use this keyword with variables, methods, and also with classes. The final keyword in java has a different meaning depending upon whether it is applied to a variable, class, or method.
+		   final with Variables: The value of the variable cannot be changed once initialized.
+	Finally: 
+			finally is also a reserved keyword in java i.e, we can’t use it as an identifier. The finally keyword is used in association with a try/catch block and guarantees that a section of code will be executed, even if an exception is thrown. The final block will be executed after the try and catch blocks, but before control transfers back to its origin. finally is executed even if try block has return statement
+	Finalize: 
+			It is a method that the Garbage Collector always calls just before the deletion/destroying of the object which is eligible for Garbage Collection, so as to perform clean-up activity. Clean-up activity means closing the resources associated with that object like Database Connection, Network Connection, or we can say resource de-allocation. Remember, it is not a reserved keyword. Once the finalized method completes immediately Garbage Collector destroys that object. finalize method is present in the Object class and its syntax is:
+			  protected void finalize throws Throwable{}
+
+Q)How to implement the predicate,consumer and Byfunction?
+	class Arthmetic{
+		public static int add(int a,int b){
+			return a+b;
+	}
+	public class examples{
+		static boolean checkAge(int age){
+			if(age>17)
+				return true;
+			else return false;
+		}
+		public static void main(String args){
+			Bifunction<Integer,Integer> addr = Arthmetic::add;
+			System.out.println(addr.apply(4,5)); // 9
+			pridicate<Integer> predicate = Test::checkAge
+			System.out.println(predicate.test(25); //true
+			Consumer<Integer> consume = list.stream().forEach(a->Syste.out.println(a+" "));
+			consume.accept(list);
+		}
+	}
+Q) What is the difference between throws and throw?
+	Throw: Java throw keyword is used throw an exception explicitly in the code, inside the function or the block of code.
+		   Using throws keyword, we can declare both checked and unchecked exceptions. However, the throws keyword can be used to propagate checked exceptions only.
+		   The throw keyword is followed by an instance of Exception to be thrown.
+		   throw is used within the method.
+		   We are allowed to throw only one exception at a time i.e. we cannot throw multiple exceptions.
+	Throws: Java throws keyword is used in the method signature to declare an exception which might be thrown by the function while the execution of the code.
+			The throws keyword is followed by class names of Exceptions to be thrown.
+			throws is used with the method signature.
+			We can declare multiple exceptions using throws keyword that can be thrown by the method. For example, main() throws IOException, SQLException.
+			
+Q) What is the difference between String,String builder and string buffer?
+	String: String is final class and immutable in java
+	StringBuffer: StringBuffer is synchronized i.e. thread safe. It means two threads can't call the methods of StringBuffer simultaneously.
+				  StringBuffer is less efficient than StringBuilder.
+				  StringBuffer was introduced in Java 1.0
+	StringBuilder : StringBuilder is non-synchronized i.e. not thread safe. It means two threads can call the methods of StringBuilder simultaneously.
+					StringBuilder is more efficient than StringBuffer.
+					StringBuilder was introduced in Java 1.5
+					
+Q) What is the difference between array and arrayList?
+	Array:  An array is a dynamically-created object. It serves as a container that holds the constant number of values of the same type. It has a     contiguous memory location
+		  Array is static in size.
+		  An array is a fixed-length data structure.
+		  It is mandatory to provide the size of an array while initializing it directly or indirectly.
+		  It performs fast in comparison to ArrayList because of fixed size.
+		  An array can store both objects and primitives type.
+		  We use for loop or for each loop to iterate over an array.
+		  We cannot use generics along with array because it is not a convertible type of array.
+		  Array provides a length variable which denotes the length of an array.
+		  We can add elements in an array by using the assignment operator.
+		  Array can be multi-dimensional.
+	ArrayList: The ArrayList is a class of Java Collections framework. It contains popular classes like Vector, HashTable, and HashMap
+			   ArrayList is dynamic in size.
+			   ArrayList is a variable-length data structure. It can be resized itself when needed.
+			   We can create an instance of ArrayList without specifying its size. Java creates ArrayList of default size.
+			   ArrayList is internally backed by the array in Java. The resize operation in ArrayList slows down the performance.
+			   We cannot store primitive type in ArrayList. It automatically converts primitive type to object.
+			   We use an iterator to iterate over ArrayList.
+			   ArrayList allows us to store only generic/ type, that's why it is type-safe.
+			   ArrayList provides the size() method to determine the size of ArrayList.
+			   Java provides the add() method to add elements in the ArrayList.
+			   ArrayList is always single-dimensional.
+	
+	
+Q) Explain about the concurrent hash map?
+	The underlined data structure for ConcurrentHashMap is Hashtable.
+	ConcurrentHashMap class is thread-safe i.e. multiple threads can operate on a single object without any complications.
+	At a time any number of threads are applicable for a read operation without locking the ConcurrentHashMap object which is not there in HashMap.
+	In ConcurrentHashMap, the Object is divided into a number of segments according to the concurrency level.
+	The default concurrency-level of ConcurrentHashMap is 16.
+	In ConcurrentHashMap, at a time any number of threads can perform retrieval operation but for updated in the object, the thread must lock the particular segment in which the thread wants to operate. This type of locking mechanism is known as Segment locking or bucket locking. Hence at a time, 16 update operations can be performed by threads.
+	Inserting null objects is not possible in ConcurrentHashMap as a key or value.
+	
+Q) when you can go for linkedlist and arrayList?
+	LinkedList should be used where modifications to a collection are frequent like addition/deletion operations. LinkedList is much faster as compare to ArrayList in such cases. In case of read-only collections or collections which are rarely modified, ArrayList is suitable.
+Q) What is the difference between list and set?
+	List is an ordered sequence of elements whereas Set is a distinct list of elements which is unordered.
+
+	List <E>: An ordered collection (also known as a sequence). The user of this interface has precise control over where in the list each element is inserted. The user can access elements by their integer index (position in the list), and search for elements in the list.
+
+	Set<E>: A collection that contains no duplicate elements. More formally, sets contain no pair of elements e1 and e2 such that e1.equals(e2), and at most one null element. As implied by its name, this interface models the mathematical set abstraction.
+	
+Q) How to use the Trywith resource(auto closable)?
+	Java 7:
+		try(FileOutputStream fileOutputStream =newFileOutputStream("/java7-new-features/src/abc.txt")){}
+		try(FileOutputStream fileOutputStream =new FileOutputStream("/java7-new-features/src/abc.txt");  
+			InputStream input = new FileInputStream("/java7-new-features/src/abc.txt")){ }
+	Java 9:
+		static String readData(String message) throws IOException {
+		Reader inputString = new StringReader(message);
+		BufferedReader br = new BufferedReader(inputString);
+		try (br) {
+			return br.readLine();
+		}
+   }
+   
+Q) What is service registry?
+	You can use Spring Cloud’s @EnableEurekaServer to stand up a registry with which other applications can communicate. This is a regular Spring Boot application with one annotation (@EnableEurekaServer) added to enable the service registry. 
+	
+Q) What is the gateway in microservices?
+	The API Gateway offers a reverse proxy to redirect or route requests (layer 7 routing, usually HTTP requests) to the endpoints of the internal microservices
+	The gateway provides a single endpoint or URL for the client apps and then internally maps the requests to a group of internal microservices
+	
+Q) Base64 authentication in spring and how it will work?
+	With Basic Authentication, clients send it's Base64 encoded credentials with each request, using HTTP [Authorization] header . That means each request is independent of other request and server does not maintain any state information for the client. This header will be sent with each request.
+	
+Q) One-to-one and one-to-many relation in hibernate?
+	@OneToMany(mappedBy ="ob")
+    private List<Model>models;
+	@ManyToOne
+    @JoinColumn(name = "manufacture_id")
+    private Manufactures ob;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "student_gfg_detail_id")
+    private StudentGfgDetail studentGfgDetail;
+
+Q) What is many-to-many relation relationg ships in JPA?
+	@ManyToMany
+    Set<Course> likedCourses; 
+	@ManyToMany
+    Set<Student> likes;
+	// join table in student pojo
+	@ManyToMany
+	@JoinTable(
+	name = "course_like", 
+	joinColumns = @JoinColumn(name = "student_id"), 
+	inverseJoinColumns = @JoinColumn(name = "course_id"))
+	Set<Course> likedCourses;
+	====================================
+
+	class CourseRating {
+
+		@EmbeddedId
+		CourseRatingKey id;
+
+		@ManyToOne
+		@MapsId("studentId")
+		@JoinColumn(name = "student_id")
+		Student student;
+
+		@ManyToOne
+		@MapsId("courseId")
+		@JoinColumn(name = "course_id")
+		Course course;
+
+	}
+	class Student {
+
+		// ...
+
+		@OneToMany(mappedBy = "student")
+		Set<CourseRating> ratings;
+
+		// ...
+	}
+
+	class Course {
+
+		// ...
+
+		@OneToMany(mappedBy = "course")
+		Set<CourseRating> ratings;
+
+		// ...
+	}
+	==============================
+	new Entity
+		@Entity
+class CourseRegistration {
+
+    @Id
+    Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "student_id")
+    Student student;
+
+    @ManyToOne
+    @JoinColumn(name = "course_id")
+    Course course;
+	}
+	class Student {
+
+    @OneToMany(mappedBy = "student")
+    Set<CourseRegistration> registrations;
+
+    }
+
+	class Course {
+
+    @OneToMany(mappedBy = "course")
+    Set<CourseRegistration> registrations;
+
+	}
+	
+	
+Q) What is the difference between hibernate and JPA?
+	Hibernate: Hibernate is to map the Java classes to database tables.
+			   Hibernate is an implementation of JPA guidelines.
+			   It helps in mapping Java data types to SQL data types.
+			   It is the contributor of JPA.
+	JPA:	   It is considered as a link between an object-oriented model and a relational database system. 
+			   JPA is only a specification, it is not an implementation.
+			   It is a set of rules and guidelines to set interfaces for implementing object-relational mapping, .
+			   It needs a few classes and interfaces.
+			   It supports simple, cleaner, and assimilated object-relational mapping.
+			   It supports polymorphism and inheritance.
+			   Dynamic and named queries can be included in JPA.
+			   
+Q) What is cross origin error or domain error?
+	Cross-Origin Resource Sharing (CORS) is a standard that allows a server to relax the same-origin policy. This is used to explicitly allow some cross-origin requests while rejecting others. For example, if a site offers an embeddable service, it may be necessary to relax certain restrictions.
+	
+Q) What is the difference between get,post,delete,put and patch?
+	POST creates a resource.
+	PUT replaces a resource.
+	PATCH updates a resource.
+	DELETE removes a resource.
+
+Q) How do you check the health of the application in spring?
+	Spring Boot provides an inbuilt health check service to check the connectivity of your application.
+	You just need to add “spring-boot-starter-actuator” dependency and the health check becomes automatically available at /actuator/health endpoint.
+	
+Q) How to change the angular version ?
+	The version of angular used in a project is determined by the version of angular cli installed. Any specific version of angular cli can be installed with the following command:
+	npm install --global @angular/cli@x.x.x.
+
+	example:
+
+		npm install --global @angular/cli@1.6.6
+		even if you have another version of angular cli (either newer or older) installed. That should not cause issues. However to be sure you can use:
+		npm uninstall -g angular-cli
+		npm cache clean
+		npm install -g angular-cli@1.6.1
+
+Q)How to handling the security in spring boot application?
+	Authentication is the fundamental aspect of designing a secure microservice. We can implement authentication in various ways, like using user-based credentials, certificates, or token-based
+	@Configuration
+	@EnableWebSecurity
+	public class SecurityConfig {
+
+		@Bean
+		public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+		http.cors(Customizer.withDefaults()).csrf(AbstractHttpConfigurer::disable)
+			.sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+			.addFilterAfter(requestHeaderAuthenticationFilter(), HeaderWriterFilter.class)
+			.authorizeHttpRequests(authorizationManagerRequestMatcherRegistry -> authorizationManagerRequestMatcherRegistry
+                      .requestMatchers("/api/**").authenticated());
+
+        return http.build();
+    }
+}
+	
+Q) How do you authenticate the 3rd party services and how do you configure in each method?
+		
+
+	
+
+	
+Q) How do you migrate from Oracle to Mysql?
+	There are two basic methods for migrating data: one-time load and real-time replication. The one-time load method is where you export the existing data from Oracle and import it into MySQL. The real-time replication method is where data is immediately copied from Oracle to MySQL as it is being generated.
+		When you migrate the data, follow these guidelines, most of which apply to both the one-time load and real-time replication methods:
+
+	Character sets: Ensure compatible character sets between the source Oracle database and target MySQL database.
+	Foreign keys: To speed up the ingestion, temporarily disable foreign key constraints on the target MySQL database. When the load has completed, enable the foreign key constraints.
+	Indexes: Similar to foreign keys, indexes on the target MySQL database can significantly slow down the initial load. Ensure that indexes are not created on the target database until the initial load has completed.
+	Oracle sequences: MySQL supports AUTO_INCREMENT instead of sequences. Make sure that AUTO_INCREMENT attributes are disabled during the initial load to avoid overwriting Oracle's sequence-generated values. Add the AUTO_INCREMENT attribute to the primary key column after the initial load has completed.
+	Network connectivity: If you are using CDC, make sure that both the source and target environment can establish a network connection to the CDC product to allow data capture on the Oracle side and data loading on the Cloud SQL for MySQL side.
+
+	
+Q) What is the difference between comparable and comparator?
+	Comparable : 
+			Comparable provides a single sorting sequence. In other words, we can sort the collection on the basis of a single element such as   id, name, and price.
+			Comparable affects the original class, i.e., the actual class is modified.
+			Comparable provides compareTo() method to sort elements.
+			Comparable is present in java.lang package.
+			We can sort the list elements of Comparable type by Collections.sort(List) method.
+	
+	Comparator : 
+			The Comparator provides multiple sorting sequences. In other words, we can sort the collection on the basis of multiple elements such as id, name, and price etc.
+			Comparator doesn't affect the original class, i.e., the actual class is not modified.
+			Comparator provides compare() method to sort elements.
+			A Comparator is present in the java.util package.
+			We can sort the list elements of Comparator type by Collections.sort(List, Comparator) method.
+	
+Q)What is Aggregations,association and composition?
+	Association - can be considered a generic term to indicate the relationship between two independent classes. This is Is-a- relation ships
+					like oneto-one.manay-to-many
+	Aggregations :  
+					is a specific form of association in which one class, the whole, contains a collection of other classes, the parts; here, however, the lifecycle of the parts does not depend upon the whole. For example, a library and books show aggregation, since books may exist somewhere apart from the library
+	
+	Composition:
+					is a stronger form of aggregation that means ownership and lifecycle dependence; if the whole gets destroyed, then the parts no longer exist. For composition, a good example would be a house and its different rooms; a room cannot exist without a house
+	
+	
+Spring Questions:
+========================================
+
+Q) What is spring IOC ?
+	Spring IoC is the mechanism to achieve loose-coupling between Objects dependencies. To achieve loose coupling and dynamic binding of the objects at runtime, objects dependencies are injected by other assembler objects.
+	
+	
+Q) What is spring cloud?
+	https://spring.io/blog/2014/06/03/introducing-spring-cloud
+	
+Q) spring bean scopes(prototype and singleton)?
+	The spring framework provides five scopes for a bean. We can use three of them only in the context of web-aware Spring ApplicationContext and the rest of the two is available for both IoC container and Spring-MVC container. 
+	The following are the different scopes provided for a bean: 
+    Singleton: Only one instance will be created for a single bean definition per Spring IoC container and the same object will be shared for each request made for that bean.
+	Prototype: A new instance will be created for a single bean definition every time a request is made for that bean.
+	Request: A new instance will be created for a single bean definition every time an HTTP request is made for that bean. But Only valid in the context of a web-aware Spring ApplicationContext.
+	Session: Scopes a single bean definition to the lifecycle of an HTTP Session. But Only valid in the context of a web-aware Spring ApplicationContext.
+	Global-Session: Scopes a single bean definition to the lifecycle of a global HTTP Session. It is also only valid in the context of a web-aware Spring ApplicationContext.
+	
+Q) What is the difference between fail-fast and fail-safe?
+	Fail fast: Iterators in java are used to iterate over the Collection objects.Fail-Fast iterators immediately throw ConcurrentModificationException if there is structural modification of the collection. Structural modification means adding, removing any element from collection while a thread is iterating over that collection. Iterator on ArrayList, HashMap classes are some examples of fail-fast Iterator.
+	Fail-Safe: iterators don’t throw any exceptions if a collection is structurally modified while iterating over it. This is because, they operate on the clone of the collection, not on the original collection and that’s why they are called fail-safe iterators. Iterator on CopyOnWriteArrayList, ConcurrentHashMap classes are examples of fail-safe Iterator.
+	
+
+Q) What is criteria in hibernate?
+	Criteria in Hibernate to run update or delete queries or any DDL statements. Hibernate Criteria query is only used to fetch the results from the database using object oriented approach.
+	Hibernate Criteria API provides Projection that we can use for aggregate functions such as sum(), min(), max() etc.
+	Hibernate Criteria API can be used with ProjectionList to fetch selected columns only.
+	Criteria in Hibernate can be used for join queries by joining multiple tables, useful methods for Hibernate criteria join are createAlias(), setFetchMode() and setProjection()
+	Criteria in Hibernate API can be used for fetching results with conditions, useful methods are add() where we can add Restrictions.
+	Hibernate Criteria API provides addOrder() method that we can use for ordering the results.
+	
+	
+Q) Can we achieve polymorphism using interfaces?
+	Yes
+	
+Q) What is the use of the optional class in java8?
+	Java introduced a new class Optional in jdk8. It is a public final class and used to deal with NullPointerException in Java application. 
+	You must import java.util package to use this class. 
+	It provides methods which are used to check the presence of value for particular variable.
+	
+Q) How do you store unique elements in arrayList?                                                                       
+	While converting ArrayList to HashSet all the duplicate values are removed and as a result, unique values are obtained.
+	
+Q) What is the difference between @Name and @Qualifier?
+	@Named is a Java standard (JSR 330), @Qualifier is used only for Spring; latest versions of Spring recognize both. I'd use @Named because @Qualifier is rather used to solve ambiguities where you have two or more beans of the same type.
+	
+Q) How do you create beans based on the condition?
+
+	@Component
+	@Profile("!a & !b")
+	public class MyComponent {}
+
+	public class AuditEnabledCondition implements Condition {
+
+		@Override
+		public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
+			final Environment environment = context.getEnvironment();
+			return environment.getProperty("audit.enabled", Boolean.class, false);
+		}
+	}
+	Component
+	@Conditional(AuditEnabledCondition.class)
+	public class DefaultAuditService implements AuditService {    
+    
+		// Other code.
+	}
+	@Configuration
+	@ConditionalOnProperty(
+    value="module.enabled", 
+    havingValue = "true", 
+    matchIfMissing = true)
+	class CrossCuttingConcernModule {
+		...
+	}
+	-
+	@Configuration
+	@ConditionalOnExpression( "${module.enabled:true} and ${module.submodule.enabled:true}")
+	@ConditionalOnResource(resources = "/logback.xml")
+	@ConditionalOnClass(name = "this.clazz.does.not.Exist")
+	
+
+Q) What is the difference weak reference,Strong  and soft references?
+	Strong References :This is the default type/class of Reference Object. Any object which has an active strong reference are not eligible for garbage collection. The object is garbage collected only when the variable which was strongly referenced points to null.
+	
+	Weak References	  : Weak Reference Objects are not the default type/class of Reference Object and they should be explicitly specified while using them.
+						This type of reference is used in WeakHashMap to reference the entry objects .
+						If JVM detects an object with only weak references (i.e. no strong or soft references linked to any object object), this object will be marked for garbage collection.
+						To create such references java.lang.ref.WeakReference class is used.
+						These references are used in real time applications while establishing a DBConnection which might be cleaned up by Garbage Collector when the application using the database gets closed.
+	Soft References	  : In Soft reference, even if the object is free for garbage collection then also its not garbage collected, until JVM is in need of memory badly.The objects gets cleared from the memory when JVM runs out of memory.To create such references java.lang.ref.SoftReference class is used.
+	Phantom References: The objects which are being referenced by phantom references are eligible for garbage collection. But, before removing them from the memory, JVM puts them in a queue called ‘reference queue’ . They are put in a reference queue after calling finalize() method on them.To create such references java.lang.ref.PhantomReference class is used.
+	
+Q) What are the design patterences in microservices?
+	https://javarevisited.blogspot.com/2021/09/microservices-design-patterns-principles.html#axzz7rzNZPPZc
+	https://www.edureka.co/blog/microservices-design-patterns
+	
+Q) When @Modifying using in repository native query in Spring JPA? 
+	 For updating queries, we must add the @Modifying annotation.
+	 The @Modifying annotation is used to enhance the @Query annotation so that we can execute not only SELECT queries, but also INSERT, UPDATE, DELETE, and even DDL queries.
+	 
+Q) How tree set work on employee object?
+	The TreeSet stores the objects in the ascending order, which is a natural ordering of a tree. We can also specify a comparator to sort the elements based on it during the creation of the TreeSet. It implements the SortedSet and NavigableSet interface to maintain and navigate the order of the elements.
+
+Q) What are the JDBC drivers and types?
+	Type-1 driver or JDBC-ODBC bridge driver uses ODBC driver to connect to the database. The JDBC-ODBC bridge driver converts JDBC method calls into the ODBC function calls. Type-1 driver is also called Universal driver because it can be used to connect to any of the databases.
+		As a common driver is used in order to interact with different databases, the data transferred through this driver is not so secured.
+		The ODBC bridge driver is needed to be installed in individual client machines.
+		Type-1 driver isn’t written in java, that’s why it isn’t a portable driver.
+		This driver software is built-in with JDK so no need to install separately.
+		It is a database independent driver.
+	Type-2 driver
+		The Native API driver uses the client -side libraries of the database. This driver converts JDBC method calls into native calls of the database API. In order to interact with different database, this driver needs their local API, that’s why data transfer is much more secure as compared to type-1 driver.
+
+		Driver needs to be installed separately in individual client machines
+		The Vendor client library needs to be installed on client machine.
+		Type-2 driver isn’t written in java, that’s why it isn’t a portable driver
+		It is a database dependent driver.
+	Type-3 driver
+		The Network Protocol driver uses middleware (application server) that converts JDBC calls directly or indirectly into the vendor-specific database protocol. Here all the database connectivity drivers are present in a single server, hence no need of individual client-side installation.
+
+		Type-3 drivers are fully written in Java, hence they are portable drivers.
+		No client side library is required because of application server that can perform many tasks like auditing, load balancing, logging etc.
+		Network support is required on client machine.
+		Maintenance of Network Protocol driver becomes costly because it requires database-specific coding to be done in the middle tier.
+		Switch facility to switch over from one database to another database.
+	Type-4 driver
+		Type-4 driver is also called native protocol driver. This driver interact directly with database. It does not require any native database library, that is why it is also known as Thin Driver.
+
+		Does not require any native library and Middleware server, so no client-side or server-side installation.
+		It is fully written in Java language, hence they are portable drivers.
+	Which Driver to use When?
+		If you are accessing one type of database, such as Oracle, Sybase, or IBM, the preferred driver type is type-4.
+		If your Java application is accessing multiple types of databases at the same time, type 3 is the preferred driver.
+		Type 2 drivers are useful in situations, where a type 3 or type 4 driver is not available yet for your database.
+		The type 1 driver is not considered a deployment-level driver, and is typically used for development and testing purposes only.
+		
+Q) What is string constant pool?
+	The String constant pool is a special memory area. When we declare a String literal, the JVM creates the object in the pool and stores its reference on the stack. Before creating each String object in memory, the JVM performs some steps to decrease the memory overhead
+	When the system loads the classes, String literals of all classes go to the application-level pool. It is because of the fact that equal String literals of different classes have to be the same Object. In these situations, data in the pool should be available to each class without any dependency.
+	
+Q) How to do custom sorting on array list?
+	arrayList.sort(Comparator.comparing(MyObject::getStartDate));
+	arrayList.sort((o1, o2) -> o1.getStartDate().compareTo(o2.getStartDate()));
+	Collections.sort(Database.arrayList, (o1, o2) -> o1.getStartDate().compareTo(o2.getStartDate()));
+	personList.stream().sorted(Comparator.comparingLong(Person::getPersonId)).forEach(person -> System.out.println(person.getName()));
+	
+	public class CustomComparator implements Comparator<MyObject> {
+    @Override
+		public int compare(MyObject o1, MyObject o2) {
+        return o1.getStartDate().compareTo(o2.getStartDate());
+		}
+	}
+	Collections.sort(Database.arrayList, new CustomComparator
+	
+	Collections.sort(Database.arrayList, new Comparator<MyObject>() {
+    @Override
+		public int compare(MyObject o1, MyObject o2) {
+        return o1.getStartDate().compareTo(o2.getStartDate());
+    }
+	});
+						
+
+Q) How do you define second level cache in hibernate?
+	Hibernate second level cache uses a common cache for all the session object of a session factory. It is useful if you have multiple session objects from a session factory.
+	SessionFactory holds the second level cache data. It is global for all the session objects and not enabled by default.
+	
+Q) How the update the cache object, that object updated by the anohter way?
+Q) Spring bean life cycle(Post bean processor and how do you define)?
+	Bean life cycle is managed by the spring container. When we run the program then, first of all, the spring container gets started. After that, the container creates the instance of a bean as per the request, and then dependencies are injected. And finally, the bean is destroyed when the spring container is closed.
+	
+	
+	
+Q) Why default methods in interfaces?
+	The most important use of default methods in interfaces is to provide additional functionality to a given type without breaking down the implementing classes
+	
+Q) Spy and mockito difference?
+	https://stackoverflow.com/questions/28295625/mockito-spy-vs-mock
+	
+Q) What is the difference between mockito and power mocito?
+	PowerMockito is a PowerMock's extension API to support Mockito. It provides capabilities to work with the Java Reflection API in a simple way to overcome the problems of Mockito, such as the lack of ability to mock final, static or private methods.
+	
+Q) What is spring spec and what is the use?
+Q) What are the different types of lock in hibernate when to use them?
+	Optimistick lock: In Optimistic Locking, the transaction doesn't lock the entity immediately. Instead, the transaction commonly saves the entity's state with a version number assigned to it.
+	Pessimistic Lock: When we use Pessimistic Locking in a transaction, and access an entity, it'll be locked immediately. The transaction releases the lock either by committing or rolling back the transaction.(StaleObjectStateException)
+		ex: entityManager.find(Student.class, studentId, LockModeType.PESSIMISTIC_READ);//find
+			Query query = entityManager.createQuery("from Student where studentId = :studentId");
+				  query.setParameter("studentId", studentId);
+				  query.setLockMode(LockModeType.PESSIMISTIC_WRITE);
+				  query.getResultList()
+			entityManager.lock(resultStudent, LockModeType.PESSIMISTIC_WRITE);//lock
+			entityManager.refresh(resultStudent, LockModeType.PESSIMISTIC_FORCE_INCREMENT);//refresh
+			
+		@NamedQuery(name="lockStudent",
+		query="SELECT s FROM Student s WHERE s.id LIKE :studentId",
+		lockMode = PESSIMISTIC_READ)
+	
+
+
+Q) what is inhertance in hibernate?
+	Table Per Hierarchy :In table per hierarchy mapping, single table is required to map the whole hierarchy, an extra column (known as discriminator column) is added to identify the class. But nullable values are stored in the table .
+	Table Per Concrete class: In case of table per concrete class, tables are created as per class. But duplicate column is added in subclass tables.
+	Table Per Subclass: In this strategy, tables are created as per class but related by foreign key. So there are no duplicate columns.
+	
+Q) Tread executer frame work and explain it?
+Q) How do you migrate the JDBC to hibernate?
+Q) What is the difference between queue and topic?
+Q) What is the index in database and what is the use?
+Q) What are the features in java8 ?
+
+
+Q) How to detect memory leaks in java
+	Common causes for these memory leaks are:
+		Excessive session objects
+		Insertion without deletion into Collection objects
+		Unbounded caches
+		Excessive operating system page swapping
+		Un-invoked listener methods
+		Poorly written custom data structures
+	How to detect a memory leak in Java
+		Using Memory Profilers
+		Verbose Garbage Collection
+		Using Heap Dumps
+
+
+
+
+
+Spring boot
+==========================================================
+Q) Factory desing pattern in spring?
+
+Q) What is the difference between request body and request mapping?
+	RequestMapping : This is one of the basic annotations in Spring that maps HTTP requests with methods. This is used to map the request into the 	specific method in Spring.
+	GetMpping :HTTP GET requests are mapped to appropriate handler methods using the Spring
+	@GetMapping - shortcut for @RequestMapping(method = RequestMethod.GET)
+	
+Q) What is the idempotent methods in rest?
+	If we make multiple identical requests and receive the same response every time, the APIs are generally called idempotent. Some API consumers knowingly or unknowingly make the same request twice or thrice. The APIs have to understand this and reply with the same response.
+	We have to have idempotent REST APIs for all the standard HTTP operations, such as GET, PUT, and DELETE. Only POST APIs will not be idempotent.
+	
+Q) What is the @Qualifier ?
+	The @Qualifier annotation is used to resolve the autowiring conflict, when there are multiple beans of same type. The @Qualifier annotation can be used on any class annotated with @Component or on methods annotated with @Bean . This annotation can also be applied on constructor arguments or method parameters.
+	
+Q) What is the difference between @QueryPath and @Path? 
+	Path parameter is a part of the URL and takes you to end-point/resources and give you the result of query from that resources.
+	Query parameter is NOT a part of the URL and they are added to the url after the ? mark, as key and value it is filtering the result of query. the end point/resource is same but it acts like a search button and filter the result and returns the response.
+	
+Q) Autowiring types ?
+	no 		:	It is the default autowiring mode. It means no autowiring bydefault.
+	byName	:   The byName mode injects the object dependency according to name of the bean. In such case, property name and bean name must be same.  It internally calls setter method.
+	byType  :	The byType mode injects the object dependency according to type. So property name and bean name can be different. It internally calls setter method.
+	constructor:	The constructor mode injects the dependency by calling the constructor of the class. It calls the constructor having large number of parameters.
+	
+Q) How to change the embedded tomcat server to jetty in springboot and other servers ?
+	Step 1: Exclude Tomcat. Find the following dependency in pom.xml : 
+	Step 2: Add Jetty. Add the following dependency to your pom.xml :
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-web</artifactId>
+		<exclusions>
+			<exclusion>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-tomcat</artifactId>
+			</exclusion>
+		</exclusions>
+    </dependency>
+   <dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-jetty</artifactId>
+   </dependency>
+In gradle,
+
+configurations {
+    compile.exclude module: "spring-boot-starter-tomcat"
+}
+ 
+dependencies {
+    compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-jetty")
+}
+	
+Q) How to import  .xml config fields to springboot application?
+	@SpringBootApplication
+	@ImportResource("classpath:app-config.xml")
+	public class MyApplication {  
+		public static void main(String[] args) {
+			SpringApplication.run(MyApplication.class, args);
+        }
+	} 
+Q) What are the spring boot annotations?
+	Spring Core Annotations	
+		DI-Related Annotations
+			@Autowired
+			@Qualifier
+			@Primary
+			@Bean
+			@Lazy
+			@Required
+			@Value
+			@Scope
+			@Lookup, etc.
+		Context Configuration Annotations
+			@Profile
+			@Import
+			@ImportResource
+			@PropertySource, etc.
+		
+	Spring Web Annotations
+		@RequestMapping
+		@RequestBody
+		@PathVariable
+		@RequestParam
+		Response Handling Annotations
+			@ResponseBody
+			@ExceptionHandler
+			@ResponseStatus
+		@Controller
+		@RestController
+	@ModelAttribute
+	@CrossOrigin
+
+	Spring Boot Annotations
+		@SpringBootApplication(Combimation of @EnableAutoConfiguration, @ComponentScan, and @Configuration)
+		@EnableAutoConfiguration
+		Auto-Configuration Conditions
+			@ConditionalOnClass, and @ConditionalOnMissingClass
+			@ConditionalOnBean, and @ConditionalOnMissingBean
+			@ConditionalOnProperty
+			@ConditionalOnResource
+			@ConditionalOnWebApplication and @ConditionalOnNotWebApplication
+			@ConditionalExpression
+			@Conditional
+	Spring Scheduling Annotations
+		@EnableAsync
+		@EnableScheduling
+		@Async
+		@Scheduled
+		@Schedules
+		
+	Spring Data Annotations
+		Common Spring Data Annotations
+			@Transactional
+			@NoRepositoryBean
+			@Param
+			@Id
+			@Transient
+			@CreatedBy, @LastModifiedBy, @CreatedDate, @LastModifiedDate
+		Spring Data JPA Annotations
+			@Query
+			@Procedure
+			@Lock
+			@Modifying
+			@EnableJpaRepositories
+		Spring Data Mongo Annotations
+			@Document
+			@Field
+			@Query
+			@EnableMongoRepositories
+	Spring Bean Annotations
+		Stereotype Annotations
+			@Component
+			@Service
+			@Repository
+			@Controller
+			
+	Microservice annotation
+		@EnableConfigServer
+		@EnableEurekaServer
+		@EnableDiscoveryClient
+		@EnableCircuitBreaker
+			@HystrixCommand(fallbackMethod = “fallbackMethodName”)
+		@EnableRetry
+		@Retryable(retryFor = { Exception.class },
+			maxAttempts = 5,
+			backoff = @Backoff(delay = 2000, multiplier = 2, maxDelay = 10000))
+			
+		
+@) What is the difference between @Controller and @RestController?
+	@Controller
+		A Controller typically returns a View object, which is responsible for rendering a web page that can be viewed by the user.
+		
+	@RestController	
+		A RestController returns a ResponseBody object that contains data in a format such as JSON or XML
+		
+		
+Spring Micro serviceInterview questions
+==========================================================
+Circuite Breaker steps 
+	CLOSED State
+	When both services which are interacting are up and running, circuit breaker is CLOSED. Circuit breaker is counting the number of remote API calls continuously.
+
+	OPEN State
+	As soon as the percentage of failing remote API calls is exceeding the given threshold, circuit breaker changes its state to OPEN state. Calling micro service will fail immediately, and an exception will be returned. That means, the flow is interrupted.
+
+	HALF OPEN State
+	After staying at OPEN state for a given timeout period, breaker automatically turns its state into HALF OPEN state. In this state, only a LIMITED number of remote API calls are allowed to pass through. If the failing calls count is greater than this limited number, breaker turns again into OPEN state. Otherwise it is CLOSED.
+	
+	@SpringBootApplication
+	@EnableCircuitBreaker
+	public class Application {
+    public static void main(String[] args) {
+        new SpringApplicationBuilder(Application.class).web(true).run(args);
+    }
+
+	}
+
+	@Component
+	public class StoreIntegration {
+
+		@HystrixCommand(fallbackMethod = "defaultStores")
+		public Object getStores(Map<String, Object> parameters) {
+			//do stuff that might fail
+		}
+
+		public Object defaultStores(Map<String, Object> parameters) {
+			return /* something useful */;
+		}
+	}
+	
+	Health indicator
+	{
+    "hystrix": {
+        "openCircuitBreakers": [
+            "StoreIntegration::getStoresByLocationLink"
+        ],
+        "status": "CIRCUIT_OPEN"
+    },
+    "status": "UP"
+}
+
+Microserices communication:
+	Synchronous HTTP/REST: Microservices can communicate via HTTP using RESTful APIs, exchanging data in JSON or XML formats. For example, Spring Boot provides 
+	RestTamplete, and WebClient classes to make REST API calls from one microservice to another microservice.
+
+	Messaging: Asynchronous communication can be achieved using message queues or message brokers like RabbitMQ or Apache Kafka. 
+
+	Service Discovery: Microservices can use service discovery mechanisms like Netflix Eureka or Spring Cloud Consul to locate and communicate with other services dynamically. 
+
+Q)What is the difference between webclient and resttemplate?
+A Webclient:
+	Spring WebClient is asynchronous, it won't stop the running thread while it waits for a response.
+	Microservices, reactive apps, and situations needing a high level of concurrency are the greatest uses for WebClient
+	ex:Flux<Tweet> tweetFlux = WebClient.create()
+      .get()
+      .uri(getSlowServiceUri())
+      .retrieve()
+      .bodyToFlux(Tweet.class);
+
+ RestTemplate:
+	Spring RestTemplate is synchronous and blocking since it makes use of the Java Servlet API.
+	Perfect for straightforward use cases and conventional monolithic apps in RestTemplate
+	
+	ex:ResponseEntity<Products> response = restTemplate.getForEntity(productsUrl, Products.class);
+	
+SQL Questions=
+================================
+Q) Uniqe key and primary key differences?
+	unique: Uniquely determines a row which isn’t primary key.
+			Can accepts NULL values.
+			table has more than one unique key
+			Creates non-clustered index
+			A unique key does not supports auto increment value.
+			We can change unique key values.
+	primary:Used to serve as a unique identifier for each row in a table.
+			Cannot accept NULL values.
+			Only one primary key 
+			Creates clustered index
+			A Primary key supports auto increment value.
+			We cannot change or delete values stored in primary keys.
+			
+Q) What is difference between drop and truncate? 
+	Drop: in SQL refers to the removal of a table or database from a server. delete the table structure as well 
+	Truncate" is a SQL command that removes all rows from a table but keeps the table's structure intact
+	
+Q) What is the difference between drop and delete?
+	DROP command in SQL deletes entire database objects and their data, whereas the DELETE command removes specific rows from the table( specified by the where clause
+	
+Q)What is the difference between Union and Union ALll?
+	Union:
+		Union means joining two or more data sets into a single set. In SQL Server, Union is used to combine two queries into a single result set using the select statements. Union extracts all the rows that are described in the query
+			Ex: query1 UNION  query2
+		
+	Union- All:
+		A union is used for extracting rows using the conditions specified in the query while Union All is used for extracting all the rows from a set of two tables
+		  Ex: query1 UNION ALL query2
+
+Q) Find the 2nd highest salary in sql?
+	1 : SELECT MAX(salary) FROM employee WHERE salary NOT IN (SELECT MAX(salary) FROM employee);
+	2 : SELECT e1.salary FROM employee e1 JOIN employee e2 ON e1.salary < e2.salary GROUP BY e1.salary ORDER BY e1.salary DESC LIMIT 1;
+	3 : SELECT DISTINCT salary FROM employee ORDER BY salary DESC LIMIT 1,1;
+	4 : SELECT salary FROM employee e1 WHERE NOT EXISTS (SELECT 1 FROM employee e2 WHERE e2.salary > e1.salary);
+	5 : SELECT salary FROM ( SELECT salary, RANK() OVER (ORDER BY salary DESC) as rank  FROM employee) sub WHERE rank = 2;
+
+Q) Third highest salary of the employee?
+	select * from(select ename, sal, dense_rank() over(order by sal desc)r from Employee) where r=&n;
+	select * from Employee ORDER BY `sal` DESC limit 5,1; 6th highest salary
+	
+Q) Find the nth highest salary in sql?
+	SELECT salary FROM (SELECT salary, ROW_NUMBER() OVER (ORDER BY salary DESC) as row_num  FROM employees) numbered_employees WHERE row_num = n;
+	SELECT salary FROM employees ORDER BY salary DESC LIMIT n-1, 1;
+
+Q) How to create plan and execute plan
+	explain plan for
+		select  e.ename,r.rname
+		from    employees  e
+			join    roles       r on (r.id = e.role_id)
+			join    departments d on (d.id = e.dept_id)
+			where   e.staffno <= 10
+			and     d.dname in ('Department Name 1','Department Name 2');
+
+	SELECT * FROM table(DBMS_XPLAN.DISPLAY (FORMAT=>'ALL +OUTLINE'));
+	
+Q) Write the sql query get the even values ?
+	SELECT * FROM [Details].[StudentDetails] WHERE StudentId LIKE ‘%[0,2]’
+	
+Q) What are the different statements are available in JDBC?
+	Create Statement : Statement statement = connection.createStatement();
+		boolean execute(String SQL): If the ResultSet object is retrieved, then it returns true else false is returned. Is used to execute SQL DDL statements or for dynamic SQL.
+		int executeUpdate(String SQL): Returns number of rows that are affected by the execution of the statement, used when you need a number for INSERT, DELETE or UPDATE statements.
+		ResultSet executeQuery(String SQL): Returns a ResultSet object. Used similarly as SELECT is used in SQL.
+	Prepared Statement : Statement pstmt = con.prepareStatement(query);
+		execute(): This returns a boolean value and executes a static SQL statement that is present in the prepared statement object.
+		executeQuery(): Returns a ResultSet from the current prepared statement.
+		executeUpdate(): Returns the number of rows affected by the DML statements such as INSERT, DELETE, and more that is present in the current Prepared Statement.
+	Callable Statement :CallableStatement cstmt = con.prepareCall("{call Procedure_name(?, ?}");
+		execute() is used to perform the execution of the statement.
+		
+		
+Design patterns
+=====================================
+Q) How to create Singleton class in java?
+	To create a singleton class, we must follow the steps, given below:
+	1. Ensure that only one instance of the class exists.
+	2. Provide global access to that instance by
+	Declaring all constructors of the class to be private.
+	Providing a static method that returns a reference to the instance. The lazy initialization concept is used to write the static methods.
+	The instance is stored as a private static variable.
+		
+	Ex: class Singleton implements Cloneable{
+			private static Singleton singleton_instance =null;
+			private Singleton(){
+			}
+			public static Singleton getInstance()
+			{
+				if (singleton_instance == null)
+					singleton_instance = new Singleton();
+  
+				return singleton_instance;
+			}
+			public Singleton clone(){
+			throw new CloneNotSupportedException();
+			}
+	}
+
+Q) Waht is factory design-pattern?
+	
+	A Factory Pattern or Factory Method Pattern says that just define an interface or abstract class for creating an object but let the subclasses decide which class to instantiate. In other words, subclasses are responsible to create the instance of the class
+	
+	The Factory Method Pattern is also known as Virtual Constructor.
+	abstract class Plan{  
+         protected double rate;  
+         abstract void getRate();  
+   
+         public void calculateBill(int units){  
+              System.out.println(units*rate);  
+          }  
+	}
+	
+	class DemosticPlan extends Plan{
+	
+		public void getRate(){
+			reate = 3.5;
+		}
+	}
+	
+	class CommercialPlan extends Plan{
+	
+		public void getRate(){
+			reate = 7.5;
+		}
+	}
+	
+	class InstitutionalPlan extends Plan{
+	
+		public void getRate(){
+			reate = 5.5;
+		}
+	}
+	
+	Class PlanFactory{
+		public Plan getPlan(String planType){  
+            if(planType == null){  
+             return null;  
+            }  
+          if(planType.equalsIgnoreCase("DOMESTICPLAN")) {  
+                 return new DomesticPlan();  
+               }   
+           else if(planType.equalsIgnoreCase("COMMERCIALPLAN")){  
+                return new CommercialPlan();  
+            }   
+          else if(planType.equalsIgnoreCase("INSTITUTIONALPLAN")) {  
+                return new InstitutionalPlan();  
+          }  
+		return null;  
+		} 
+	}
+	class GenerateBill {
+	public static void main(){
+		PlanFactory planFactory =  new PlanFactory();
+		Plsn p = planFactory.getPlan("DOMESTICPLAN");
+		p.getRate();
+		p.calculateBill(units)
+	
+
+
+
+
+==========================Cloud================================================================================================================
+Q) How to attach different availability zone EFS volumes to another region EC2 instances?
+Q) How to attach different availability zone EBS volumes to another region EC2 instances?
+Q) Difference between EBS and EFS?
+Q) What type of load balancer using in your project?
+Q) Can we attach multiple volumes to EC2 instance?
+Q) What is the network system in EFS?
+Q) What is the difference between root volume and extra volume we are attaching?
+Q) How to transfer docket images from one server to another server?
+Q) How you install kubernates?
+Q) What is the difference between config map and secrets in kubernates?
+Q) Difference between security group and network load balancers?
+Q) What type of security you following for network load balancer?
+Q) How to resolve circular dependecy in cloud formation?
+Q) properties in route53?
+Q) What is the difference between NACL and security groups?
+Q) What are the defalut permission you give while creating the s3 bucket?
+Q) What is glacier and s3 storage class types?
+
+
+Q) S3 encryption types? 
+	
+	Server-Side Encryption (SSE) is the simplest data encryption option. All heavy encryption operations are performed on the server side in the AWS cloud. You send raw (unencrypted) data to AWS and then data is encrypted on the AWS side when recorded on the cloud storage. When you need to get your data back, Amazon reads the encrypted data, decrypts the needed data on the Amazon server side, and then sends the unencrypted data to you over the network. This process is transparent for end-users.
+
+	SSE-S3 is the simplest method – the keys are managed and handled by AWS to encrypt the data you have selected. You cannot see the key directly or use this key manually to encrypt or decrypt the data. AES-256 is used as the encryption algorithm. AES (Advanced Encryption Standard) is a symmetric block cypher, with 256 bit being the cryptographic key length. If you fully trust AWS, use this S3 encryption method.
+
+	SSE-KMS is a slightly different method from SSE-S3. AWS Key Management Service (KMS) is used to encrypt S3 data on the Amazon server side. The data key is managed by AWS, but a user manages the customer master key (CMK) in AWS KMS. The advantages of using the SSE-KMS encryption type are user control and audit trail.
+
+	With SSE-C, keys are provided by a customer and AWS doesn’t store the encryption keys. The provided key is passed in to AWS to handle each request related to data encryption or decryption. A user must ensure the safety of the keys. S3 data encryption is performed on the AWS server side. Only an HTTPS connection can be used (not HTTP)
+	
+	Client-side encryption
+	When using S3 client-side encryption, the client is responsible for all encryption operations. In this case, data is not encrypted by AWS but rather it is encrypted on the user’s side. Data encrypted in the user’s datacenter is uploaded directly to AWS. Two options are provided for S3 client-side encryption – a master key can be stored on the client side or on the server side. If a master key is stored on the client side, the client takes full responsibility for encryption. The advantage of this approach is that Amazon never knows the encryption keys of the user and data is never stored on Amazon servers in an unencrypted state. A user encrypts data before sending data to Amazon S3 and decrypts data after retrieving it from Amazon S3.
+
+
+Q) What is docker and what are the details available in docker file?	
+	
+	Docker can build images automatically by reading the instructions from a Dockerfile. A Dockerfile is a text document that contains all the commands a user could call on the command line to assemble an image. 
+	ex:
+	
+Q) What is the use of openshift?
+	
+	Faster time to market :     OpenShift helps simplify and speed up application modernization, allowing enterprises to cut right through the complexity involved in modernizing an enterprise application
+	
+	Greater resilience: Containerizing monolithic application structures and transforming them into loosely coupled microservices architectures helps make your applications more resilient.
+	
+	Higher efficiency:  Deploying on OpenShift makes it easier to manage different parts of the application. Regardless of programming languages, runtimes, or application stacks, everything is in a container
+	
+	Reduced costs: With more efficient resource use, costs can be optimized. OpenShift provides greater cost visibility, making it easy to see current usage and apply resource constraints
+	Greater developer productivity: OpenShift provides a faster path to modernization by allowing developers to focus more of their efforts on actual development. By removing the need to learn new programming languages and complex development environments, developers spend less time learning skills that will be obsolete in a couple of years and more time developing features that bring value to the enterprise. Developer environments can also be set up faster, making it easier to get started coding. 
+
+	Enhanced security
+	Better user experiences
+	Future-readiness
+
+======================================Dev Ops================================================================================================
+Q) What are the modules you used in ansible?
+Q) How to communication happening in ansible to window server?
+Q) which version K8s you are using?
+Q) Have you tried memory based auto scaling in k8s?
+Q) What are the monitoring tools used in your project?
+Q) What is ansible fork?
+Q) How to we integrate any service to Jenkins
+Q) Write a small pipe line script?
+Q) What are the ansible rew modules?
+Q) How to configure  AWS EC2 to in Jenkins?
+Q) What is the shared library in Jenkins?
+Q) What is git rebase?
+Q) What is git Cherry pick?
+Q) How you are doing the server patching?
+Q) What are the things you will check in sonar report?
+Q) Any security scan tool you used?
+
+
+
+UI
+===========================================================================================================================================

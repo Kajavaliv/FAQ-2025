@@ -1,0 +1,850 @@
+package com.cap;
+
+import com.linkedlist.Str;
+
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+import static com.test.TodayP.isPrime;
+
+public class Test {
+    public static void main(String[] args) {
+        int a=0,b=1,next;
+        for(int i=0;i<10;i++){
+            //System.out.print(a+" ");
+            next = a+b;
+            a = b;
+            b = next;
+        }
+
+        int N = 1634;//1*1*1+5*5*5+3*3*3=153
+        String Num = String.valueOf(N);
+        int X = Num.chars().map(Character::getNumericValue)
+                .map(digit->(int)Math.pow(digit,Num.length()))
+                .sum();
+        if(N==X)
+            System.out.println("YES");
+        else
+            System.out.println("No");
+
+        //Num.chars().mapToObj(Character::getNumericValue).map(i->(int)Math.pow(1,Num.length())).sum();
+        int start=2,end=20;
+        for(int i=start;i<=end;i++){
+            if(isPrimeNo(i)){
+                //System.out.print(i+" ");
+            }
+        }
+
+        String S = "Kajavali";
+        StringBuffer SB = new StringBuffer(S).reverse();
+        //System.out.println(SB.toString());
+        String Rev="";
+        for(int i=S.length()-1;i>=0;i--){
+            Rev+=S.charAt(i);
+        }
+        //System.out.println(Rev);
+
+        System.out.println(IntStream.rangeClosed(1,S.length()).mapToObj(i->S.charAt(S.length()-i)).map(String::valueOf).collect(Collectors.joining()));
+    }
+    public static boolean isPrimeNo(int number) {
+        if (number <= 1) {
+            return false;
+        }
+        for (int i = 2; i <= Math.sqrt(number); i++) {
+            if (number % i == 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+}
+
+
+//0,1,1,2,3,5,8,13,21
+
+===================================
+
+package com.cap;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
+
+class Task implements Runnable{
+    private static AtomicInteger counter = new AtomicInteger(0);
+    private static int MAX = 15;
+    private int threadId;
+    private int totalThreads;
+
+    public Task(int totalThreads, int threadId) {
+        this.totalThreads = totalThreads;
+        this.threadId = threadId;
+    }
+
+    public void run(){
+        while (true){
+            synchronized (counter){
+                if(counter.get()>MAX){
+                    break;
+                }
+                if(counter.get()%totalThreads==threadId){
+                    System.out.println("Thread-"+(threadId+1)+":"+(counter.getAndIncrement()+1));
+                    counter.notifyAll();
+                }else {
+                    try {
+                        counter.wait();
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        }
+    }
+}
+public class ThreadPool{
+    public static void main(String[] args) {
+        int totalThreads = 3;
+        ExecutorService ES = Executors.newFixedThreadPool(totalThreads);
+        for(int i=0;i<3;i++){
+            ES.submit(new Task(totalThreads,i));
+        }
+        ES.shutdown();
+    }
+}
+
+
+=================================
+
+package com.com;
+
+class Node{
+    Node left,right;
+    int data;
+    public Node(int data){
+        this.data = data;
+    }
+}
+public class tree {
+    Node root;
+
+    public void insert(int data){
+        root = insertRec(root,data);
+    }
+
+    private Node insertRec(Node root, int data) {
+        if(root==null)
+            root = new Node(data);
+        else if(data < root.data)
+            root.left = insertRec(root.left,data);
+        else if(data > root.data)
+            root.right = insertRec(root.right, data);
+        return root;
+    }
+
+    public void inorder(){
+        inorderRec(root);
+        System.out.println();
+        preorderRec(root);
+        System.out.println();
+        postorderRec(root);
+    }
+
+    public void inorderRec(Node root){
+        if(root != null){
+            inorderRec(root.left);
+            System.out.print(root.data+" ");
+            inorderRec(root.right);
+        }
+    }
+    public void preorderRec(Node root){
+        if(root != null){
+            System.out.print(root.data+" ");
+            inorderRec(root.left);
+            inorderRec(root.right);
+        }
+    }
+    public void postorderRec(Node root){
+        if(root != null){
+            inorderRec(root.left);
+            inorderRec(root.right);
+            System.out.print(root.data+" ");
+        }
+    }
+
+
+    public Node seartch(Node root,int val) {
+        if(root.data == val)
+            return root;
+        if(root.data<val)
+            return seartch(root.right,val);
+        return seartch(root.left,val);
+
+    }
+}
+
+
+package com.com;
+
+public class TreeDemo {
+    public static void main(String[] args) {
+        tree T = new tree();
+        T.insert(8);
+        T.insert(7);
+        T.insert(12);
+        T.insert(15);
+        T.insert(2);
+        T.insert(5);
+
+        T.inorder();
+        Node result = T.seartch(T.root,15);
+
+    }
+}
+
+
+=======================
+
+package com.interview;
+
+public class SingleTon {
+
+    private SingleTon(){
+        if(SingleTonHelper.INSTANCE != null){
+            //System.out.println("Instance already created");
+            throw new IllegalStateException("Instance already created");
+        }
+    }
+
+    public static class SingleTonHelper{
+        private static final transient SingleTon INSTANCE = new SingleTon();
+    }
+
+    public static SingleTon getInstance(){
+        return SingleTonHelper.INSTANCE;
+    }
+
+    public static void main(String[] args) {
+        SingleTon ST = SingleTon.getInstance();
+        SingleTon ST1 = SingleTon.getInstance();
+
+        SingleTon ST3 = new SingleTon();
+
+        //Dummy D = new Dummy();
+        System.out.println(ST.hashCode());
+        System.out.println(ST1.hashCode());
+
+    }
+}
+
+
+=====================
+
+package com.nokia;
+
+public class Selection {
+	public static void main(String[] args) {
+		int[] arr = {1,21,13,40,76,8,19,11};
+		int minindex = -1;
+		for(int i=0;i<arr.length-1;i++) {
+			minindex = i;
+			for(int j=i;j<arr.length;j++) {
+				if(arr[minindex]>arr[j]) {
+					minindex = j;
+				}
+			}
+			int temp = arr[minindex];
+			arr[minindex]=arr[i];
+			arr[i]= temp;
+			System.out.println();
+			for(int num:arr) {
+				System.out.print(num+" ");
+			}
+		}
+		for(int num:arr) {
+			System.out.print(num+" ");
+		}
+	}
+
+}
+
+=======================
+
+package com.nokia;
+
+public class SelectionSort {
+	public static void main(String[] args) {
+		int[] arr = {64,23,14,36,10,20};
+		for(int i=0;i<arr.length-1;i++) {
+			int min_index = i;
+			for(int j=i+1;j<arr.length;j++) {
+				if(arr[j]<arr[min_index])
+					min_index = j;
+			}
+			int tmp = arr[min_index];
+			arr[min_index] = arr[i];
+			arr[i] = tmp;
+		}
+		for(int i: arr) {
+			System.out.println(i);
+		}
+	}
+
+}
+
+
+======================
+
+package com.nokia;
+
+
+
+public class SingleTonExample {
+	private SingleTonExample() {
+		if(SingleTonHelper.INSTANCE != null) {
+			System.out.println("KAJA");
+			throw new IllegalStateException("Instance already created");
+		}
+	}
+	private static class SingleTonHelper{
+		private static final SingleTonExample INSTANCE = new SingleTonExample();
+	}
+	public static SingleTonExample getInstance() {
+		return SingleTonHelper.INSTANCE;
+	}
+	public static void main(String[] args) {
+		try {
+			SingleTonExample Test = SingleTonExample.getInstance();
+			SingleTonExample Test1 = SingleTonExample.getInstance();
+			System.out.println(Test.hashCode());
+			System.out.println(Test1.hashCode());
+		}catch (IllegalStateException e) {
+			// TODO: handle exception
+			System.out.println(e.getMessage());
+		}
+	}
+
+}
+
+
+==========================
+
+package com.nokia;
+
+public class SingleTonTest {
+	private SingleTonTest()
+	{
+		if(SingleTonHelper.INSTANCE != null) {
+			throw new IllegalStateException("Instance already created");
+		}
+	}
+	private static class SingleTonHelper{
+		private static final SingleTonTest INSTANCE = new SingleTonTest();
+	}
+	public static SingleTonTest getInstance()
+	{
+		return SingleTonHelper.INSTANCE;
+	}
+	public static void main(String[] args) {
+		SingleTonTest Test1 = getInstance();
+		SingleTonTest Test2 = getInstance();
+		System.out.println(Test1.hashCode());
+		System.out.println(Test2.hashCode());
+	}
+
+}
+
+
+=========================
+
+package com.nokia;
+
+public class SinglyLinkedList {
+	public static Node insertAtBegin(Node head,int val) {
+		Node newNode = new Node(val);
+		newNode.next = head;
+		head = newNode;
+		return head;
+	}
+	public static Node insertAtEnd(Node head, int val) {
+		Node newNode = new Node(val);
+
+		if (head == null)
+			return newNode;
+		Node last = head;
+		while (last.next != null) {
+			last = last.next;
+		}
+
+		last.next = newNode;
+
+		return head;
+	}
+	public static Node insertPosition(Node head, int position, int data) {
+		Node newNode = new Node(data);
+		if(position == 1) {
+			newNode.next = head;
+			head = newNode;
+			return head;
+		}
+		Node cur = head;
+		for(int i=1;i<position-1 && cur!=null;++i) {
+			cur = cur.next;
+		}
+		if(cur == null) {
+			return head;
+		}
+		newNode.next = cur.next;
+		cur.next = newNode;
+		return head;
+	}
+	public static void printList(Node head) {
+		Node cur = head;
+		while(cur != null) {
+			System.out.println(cur.data);
+			cur= cur.next;
+		}
+		System.out.println();
+	}
+	public static Node removeFirst(Node head) {
+		if(head == null)
+			return null;
+		head=head.next;
+		return head;
+	}
+	public static Node removeLast(Node head) {
+		if(head == null)
+			return null;
+		if(head.next == null) {
+			head = null;
+			return null;
+		}
+		Node last = head;
+		while(last.next.next !=null) {
+			last = last.next;
+		}
+		last.next=null;
+		return head;
+	}
+	public static void main(String[] args) {
+		Node head = new Node(10);
+		head.next = new Node(20);
+		int data = 5;
+		head = insertAtBegin(head, 100);
+		head = insertAtEnd(head, 200);
+		head = insertPosition(head, 3, 300);
+		printList(head);
+		head = removeFirst(head);
+		printList(head);
+		head = removeLast(head);
+		printList(head);
+	}
+}
+
+class Node{
+	int data;
+	Node next;
+	public Node(int val) {
+		this.data = val;
+		this.next = null;
+	}
+}
+
+
+==================
+
+package com.nokia;
+
+public class SortA {
+	public static void main(String[] args) {
+		int[] arr = {1,6,5,8,2};
+		/*for(int k=0;k<arr.length-1;k++) {
+			for(int i=0;i<arr.length-1-k;i++) {
+				if(arr[i] > arr[i+1]){
+					int tmp = arr[i];
+					arr[i]=arr[i+1];
+					arr[i+1]=tmp;
+				}
+			}
+		}
+		 
+		for(int i=0;i<arr.length;i++) {
+			System.out.print(arr[i]);
+		}*/
+		int[] arr1 = new int[arr.length-1];
+		int index=3;
+		for(int i=0;i<index;i++) {
+			arr1[i] = arr[i];
+		}
+		for(int j=index+1;j<arr1.length;j++) {
+			arr1[j-1]=arr[j];
+		}
+		for(int i:arr1)
+			System.out.println(i);
+	}
+
+}
+
+===========================
+
+package com.nokia;
+
+public class StackImpl {
+		int top=-1;
+		int capacity = 3;
+		int[] A;
+		public StackImpl() {
+			A = new int[capacity];
+		}
+		public void push(int V) {
+			if(top>=capacity-1) {
+				System.out.println("Over Flow");
+				increaseCapacity();
+				//return false;
+			}
+				A[++top]=V;
+				System.out.println(V+" is pushed");
+				//return true;
+		}
+		private void increaseCapacity() {
+			int[] B = new int[A.length+1];
+			for(int i=top;i>-1;i--) {
+				B[i]=A[i];
+			}
+			A = B;
+		}
+
+		public int pop() {
+			if(top<0) {
+				System.out.println("Stsack is empty");
+				return 0;
+			}else {
+				return A[top--];
+			}			
+		}
+		public int peek() {
+			if(top<0) {
+				System.out.println("Stsack is empty");
+				return 0;
+			}else {
+				return A[top];
+			}			
+		}
+		public void print() {
+			for(int i=top;i>-1;i--) {
+				System.out.print(A[i]);
+			}
+		}
+		public static void main(String[] args) {
+			StackImpl S=new StackImpl();
+			S.push(10);
+			S.push(20);
+			S.push(30);
+			S.push(40);
+			S.push(50);
+			S.print();
+			System.out.println(S.pop());
+			System.out.println(S.pop());
+			System.out.println(S.pop());
+			System.out.println(S.pop());
+			S.print();
+		}
+
+}
+
+
+========================
+
+package com.nokia;
+
+public class StackLinkList {
+	StackNode root;
+	class StackNode{
+		int data;
+		StackNode next;
+		public StackNode(int data) {
+			this.data = data;
+		}
+	}
+	public boolean isEmpty() {
+		if(root==null)
+			return true;
+		else
+			return false;
+	}
+	public void push(int data) {
+		StackNode newNode = new StackNode(data);
+		if(root==null)
+			root = newNode;
+		else {
+			StackNode tmp = root;
+			root = newNode;
+			newNode.next = tmp;
+		}
+	}
+	public int pop() {
+		int popped=Integer.MIN_VALUE;
+		if(root==null)
+			System.out.println("Stack is empty");
+		else {
+			popped = root.data;
+			root = root.next;
+		}
+		return popped; 
+	}
+	public int peek() {
+		if(isEmpty()) {
+			System.out.println("Stack empty");
+			return Integer.MIN_VALUE;
+		}
+		else {
+			return root.data;
+		}
+	}
+	public void print() {
+	    StackNode current = root;  // Use a temporary pointer to traverse the list
+	    while (current != null) {
+	        System.out.print(current.data+" ");
+	        current = current.next;
+	    }
+	}
+
+	public static void main(String[] args) {
+		StackLinkList SL = new StackLinkList();
+		SL.push(10);
+		SL.push(100);
+		SL.push(1000);
+		SL.print();
+		System.out.println(SL.pop());
+		//System.out.println(SL.peek());
+		SL.print();
+	}
+
+}
+=====================
+
+package com.test;
+
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
+
+public class Today {
+	public static void main(String[] args) {
+		int[] A = {1,3,6,7,8};
+		int[] B = {5,8,9,2,10};
+		int[] C = IntStream.concat(Arrays.stream(A), Arrays.stream(B)).toArray();
+		for(int i=0;i<C.length;i++) {
+			//System.out.print(C[i]+" ");
+		}
+		 C = IntStream.concat(Arrays.stream(A), Arrays.stream(B)).sorted().distinct().toArray();
+		 for(int i=0;i<C.length;i++) {
+				//System.out.print(C[i]+" ");
+		}
+		 
+		int[] D = IntStream.rangeClosed(1, A.length).map(i -> A[A.length-i]).toArray();
+		for(int i=0;i<D.length;i++) {
+			//System.out.print(D[i]+" ");
+		}
+		String S = "lkhkjgwyflajkgh";
+		//System.out.println(S.chars().mapToObj(c ->(char)c).collect(Collectors.groupingBy(Function.identity(),Collectors.counting())));
+		List<Integer> list = new ArrayList<>();
+		list.add(1);
+		list.add(7);
+		list.add(2);
+		list.add(8);
+		list.add(9);
+		list.add(9);
+		//System.out.println(list.stream().collect(Collectors.partitioningBy(i -> i%2==0)));
+		//System.out.println(list.stream().collect(Collectors.groupingBy(Function.identity(),Collectors.counting())));
+		//list.stream().sorted(Comparator.reverseOrder()).forEach(System.out::println);
+		//list.stream().filter(i -> i%2==0).forEach(System.out::println);
+		//System.out.println(list.stream().max(Comparator.naturalOrder()).get());
+		//System.out.println(list.stream().min(Comparator.naturalOrder()).get());
+		String S1 = "MAMDM";
+		String S3 = "DAMMM";
+		S1 = Stream.of(S1.split("")).map(String::toLowerCase).sorted().collect(Collectors.joining());
+		S3 = Stream.of(S3.split("")).map(String::toLowerCase).sorted().collect(Collectors.joining());
+		if(S1.equals(S3))
+			System.out.println("Yes");
+		list.stream().sorted().limit(3).forEach(System.out::println);
+		list.stream().sorted(Comparator.reverseOrder()).limit(3).forEach(System.out::println);
+		List<String> list1 = new ArrayList<>();
+		list1.add("kjd");
+		list1.add("jjj");
+		list1.add("mnxbv");
+		list1.add("uey");
+		list1.add("jhsdfui");
+		list1.add("ywrt");
+		list1.stream().sorted(Comparator.comparing(String::length)).forEach(System.out::println);
+		String K = "kjf jkdhy ahjgdty yeyb";
+		System.out.println(Arrays.stream(K.split(" ")).map(word -> new StringBuffer(word).reverse()).collect(Collectors.joining(" ")));
+		System.out.println(IntStream.range(1, 10).sum());
+		System.out.println(IntStream.range(1, 10).average().getAsDouble());
+		IntStream.range(1, 10).forEach(System.out::println);
+		Set<Integer> set = new HashSet<>();
+				 list.stream().filter(i -> set.add(i)).collect(Collectors.toSet());
+				 System.out.println(set);
+				 
+	    System.out.println(list1.stream().skip(list1.size()-1).findFirst().get());
+	}
+
+}
+
+
+=====================
+
+package com.test;
+
+import com.linkedlist.Str;
+import jdk.jfr.internal.tool.Main;
+
+
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
+public class TodayP {
+    public static void main(String[] args) {
+        List<Integer> list = new ArrayList<>();
+        list.add(10);
+        list.add(11);
+        list.add(12);
+        list.add(12);
+        list.add(13);
+        list.add(14);
+        list.add(14);
+
+        list.stream().collect(Collectors.partitioningBy(i->i%2==0)).entrySet().stream().forEach(entry-> {
+            if(entry.getKey()){
+                System.out.println("EVEN:"+entry.getValue());
+            }else {
+                System.out.println("ODD:"+entry.getValue());
+            }
+        });
+
+        String S = "KAJAVALI";
+        //System.out.println(S.chars().mapToObj(c->(char)c).collect(Collectors.groupingBy(Function.identity(),Collectors.counting())));
+        //System.out.println(list.stream().collect(Collectors.groupingBy(Function.identity(),Collectors.counting())));
+        //list.stream().filter(i->i%2==0).forEach(System.out::println);
+        //System.out.println(list.stream().max(Comparator.naturalOrder()).get());
+        //System.out.println(list.stream().min(Comparator.naturalOrder()).get());
+        int[] A = {1,2,4,3,5,6,8,11};
+        //System.out.println(Arrays.stream(A).boxed().sorted().max(Comparator.naturalOrder()).get());
+        String B = "MAADMK";
+        String C = "DAAMM";
+        //bSystem.out.println(Stream.of(B.split("")).map(String::toUpperCase).sorted().collect(Collectors.joining()).equals(Stream.of(C.split("")).map(String::toUpperCase).sorted().collect(Collectors.joining())));
+        //Arrays.stream(A).boxed().sorted().limit(2).forEach(System.out::println);
+        //Arrays.stream(A).boxed().sorted(Comparator.reverseOrder()).limit(2).forEach(System.out::println);
+        //System.out.println(Arrays.stream(A).boxed().reduce(0,Integer::sum));
+
+        List<String> Slist = new ArrayList<>(Arrays.asList("a","jh","jhskj","jts","hgyw"));
+        //Slist.stream().sorted(Comparator.comparing(String::length)).forEach(System.out::println);
+        list.stream().filter(Slist::contains).forEach(System.out::println);
+
+        String D = "kj kjjhb kjhk khys ityr";
+        //System.out.println(Stream.of(D.split(" ")).map(w->new StringBuffer(w).reverse()).collect(Collectors.joining(" ")));
+
+        //System.out.println(Arrays.toString(IntStream.rangeClosed(1,A.length).map(i->A[A.length-i]).toArray()));
+        System.out.println(IntStream.rangeClosed(1,S.length()).mapToObj(i->S.charAt(S.length()-i)).map(String::valueOf).collect(Collectors.joining()));
+        //System.out.println(IntStream.range(1,10).sum());
+        //System.out.println(list.stream().skip(list.size()-1).findFirst().get());
+        Set<Integer> set = new HashSet<>();
+        list.stream().filter(i->!set.add(i)).collect(Collectors.toSet());
+        //System.out.println(set);
+
+        int a=0,b=1,next;
+        for(int i=0;i<10;i++){
+            //System.out.print(a+" ");
+            next = a+b;
+            a = b;
+            b = next;
+        }
+
+        int N = 1634;
+        String numStr = String.valueOf(N);
+        System.out.println(numStr.chars().map(Character::getNumericValue)
+                .map(digit->(int)Math.pow(digit,numStr.length()))
+                .sum());
+        //System.out.println(Slist.stream().collect(Collectors.toMap(String::length,Function.identity())));
+
+        int start = 2; // Starting number of the range
+        int end = 50;  // Ending number of the range
+
+        List<Integer> primeNumbers = new ArrayList<>();
+        for(int i=start;i<=end;i++){
+            if(isPrime(i))
+                primeNumbers.add(i);
+        }
+
+
+        System.out.println("Prime numbers between " + start + " and " + end + ": " + primeNumbers);
+    }
+    public static boolean isPrime(int number) {
+        if (number <= 1) {
+            return false; // Numbers less than or equal to 1 are not prime
+        }
+        return IntStream.rangeClosed(2, (int) Math.sqrt(number))
+                .noneMatch(divisor -> number % divisor == 0);
+    }
+}
+
+
+
+==========================
+
+package com.test;
+
+
+public class ThreadCom {
+	private static final int MAXTRIES = 26;
+	private static Object lock = new Object();
+	private static boolean isNumberOn = true;
+	public static void main(String[] args) {
+		Thread T1 = new Thread(new numberPrint());
+		Thread T2 = new Thread(new charPrint());
+		T1.start();
+		T2.start();
+	}
+	static class numberPrint implements Runnable{
+		public void run() {
+			for(int i=1;i<=MAXTRIES;i++) {
+				synchronized (lock) {
+					while(!isNumberOn) {
+						try {
+							lock.wait();
+						}catch(InterruptedException e){
+							Thread.currentThread().interrupt();
+						}						
+					}
+					System.out.print(i);
+					isNumberOn = false;
+					lock.notifyAll();
+				}
+			}
+		}
+	}
+	static class charPrint implements Runnable{
+		public void run() {
+			for(char c='A';c<='A'+MAXTRIES;c++) {
+				synchronized (lock) {
+					while(isNumberOn) {
+						try {
+							lock.wait();
+						}catch(InterruptedException e) {
+							Thread.currentThread().interrupt();
+						}
+					}
+					System.out.print(c);
+					isNumberOn = true;
+					lock.notifyAll();
+				}
+			}
+		}
+	}
+}

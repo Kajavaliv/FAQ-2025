@@ -1,0 +1,2044 @@
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class SumExample {
+    public static void main(String[] args) {
+        List<Integer> list = Arrays.asList(12,34,56,44,66,23,16);
+
+        //34+66=100, 56+44=100
+
+        //list.stream().collect(Collectors.groupingBy((a,b)))
+
+        for(int i=0;i<list.size();i++){
+            for(int j=i+1;j<list.size();j++){
+                if(list.get(i)+list.get(j)==100){
+                    System.out.println("("+list.get(i)+","+list.get(j)+")");
+                }
+            }
+        }
+
+        String[] array = {"apple", "banana", "cherry", "date"};
+        String[] sorted = Arrays.stream(array).sorted(Comparator.comparingInt(String::length)).toArray(String[]::new);
+        for(String s:sorted)
+            System.out.println(s);
+    }
+}
+
+
+=========================================
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class ArrayList1 {
+    private int size;
+    private int capacity = 5;
+    private int[] arrayList = new int[capacity];
+
+    public void add(int data){
+        if(isFull())
+            System.out.println("List if full");
+        else {
+            arrayList[size] = data;
+            size++;
+        }
+    }
+
+    public int remove(int index){
+        int element = 0;
+        if(isEmpty())
+            System.out.println("List is empty");
+        else{
+            element = arrayList[index];
+            for(int i=index;i<size-1;i++){
+                arrayList[i] = arrayList[i+1];
+            }
+        }
+        arrayList[--size] = 0;
+        return element;
+    }
+
+    public boolean isFull(){
+        return size==capacity;
+    }
+
+    public boolean isEmpty(){
+        return size==0;
+    }
+
+    public void show(){
+        for(int n:arrayList)
+            System.out.print(n+" ");
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        ArrayList1 L = new ArrayList1();
+        L.add(10);
+        L.add(12);
+        L.add(13);
+        L.add(14);
+        L.add(15);
+        L.show();
+        System.out.println(L.remove(3));
+        L.show();
+
+        List<String> list = Arrays.asList("ABC","HGDF","LKUI","KJHDFG");
+        System.out.println(list.stream().collect(Collectors.groupingBy(String::length)));
+    }
+
+}
+=========================================
+
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+public class Utility {
+
+    public static void main(String[] args) {
+        String S = "My Name is kajavali. kajavali is a Java developer. Java is a cool language";
+        Map<String,Long> map = Arrays.stream(S.split(" ")).collect(Collectors.groupingBy(Function.identity(),Collectors.counting()));
+        System.out.println(map);
+
+        String n = "abbadeabba";
+        List<String> list1 = new ArrayList<>();
+        List<String> list2 = new ArrayList<>();
+        for (int i = 0; i < n.length(); i++) {
+            for (int j = i + 1; j <= n.length(); j++) {
+
+                list1.add(n.substring(i,j));
+            }
+        }
+
+        for (int i = n.length() - 1; i >= 0; i--) {
+            for (int j = i + 1; j <= n.length(); j++) {
+                list2.add(n.substring(i,j));
+            }
+        }
+
+        //System.out.println(list1.stream().filter(list2::contains).collect(Collectors.toList()));
+
+        List<Integer> list3 = Arrays.asList(1,4,5,6,7);
+        System.out.println(list3.stream().reduce(1,(a,b)->a*b));
+    }
+}
+
+
+======================================
+
+//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
+// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+
+
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        List<String[]> tickets = new ArrayList<>();
+        tickets.add(new String[]{"A","B"});
+        tickets.add(new String[]{"B","D"});
+        tickets.add(new String[]{"D","G"});
+
+        String[] result = findStartAndEnd(tickets);
+        System.out.println("Start:"+result[0]+" End:"+result[1]);
+    }
+
+    public static String[] findStartAndEnd(List<String[]> tickets){
+        Map<String ,Integer> inDegree = new HashMap<>();
+        Map<String ,Integer> outDegree = new HashMap<>();
+
+        for(String[] ticket:tickets){
+            String source = ticket[0];
+            String dest = ticket[1];
+
+            outDegree.put(source,outDegree.getOrDefault(source,0)+1);
+            inDegree.put(dest,inDegree.getOrDefault(dest,0)+1);
+        }
+
+        String start = null,end = null;
+        for(String place:outDegree.keySet()){
+            if(outDegree.getOrDefault(place,0)==1 && inDegree.getOrDefault(place,0)==0){
+                start = place;
+            }
+        }
+
+        for(String place:inDegree.keySet()){
+            if(inDegree.getOrDefault(place,0)==1 && outDegree.getOrDefault(place,0)==0){
+                end = place;
+            }
+        }
+        return new String[]{start,end};
+    }
+}
+
+=================================
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+class EMP{
+    private int id;
+    private String name;
+    private double sal;
+    private String dept;
+
+    public EMP(int id, String name, double sal, String dept) {
+        this.id = id;
+        this.name = name;
+        this.sal = sal;
+        this.dept = dept;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getSal() {
+        return sal;
+    }
+
+    public String getDept() {
+        return dept;
+    }
+}
+public class DeptAvgSal {
+    public static void main(String[] args) {
+        List<EMP> empList = new ArrayList<>();
+        empList.add(new EMP(1,"KAja",2000,"HR"));
+        empList.add(new EMP(1,"Doja",300,"CR"));
+        empList.add(new EMP(1,"Moja",5000,"PR"));
+        empList.add(new EMP(1,"Raja",4000,"HR"));
+        empList.add(new EMP(1,"Kuja",1500,"CR"));
+
+        empList.stream().collect(Collectors.groupingBy(EMP::getDept, Collectors.averagingDouble(EMP::getSal)))
+                .forEach((d,avs)->System.out.println("DEPT:"+d+" AVGSAL:"+avs));
+
+        List<Integer> list = Arrays.asList(1,2,2,2,3,3,3,3,3,5,5,5,5);
+
+        Integer i =list.stream().collect(Collectors.groupingBy(Function.identity(),Collectors.counting())).entrySet().stream()
+                .sorted((e1,e2)->e2.getValue().compareTo(e1.getValue()))
+                .collect(Collectors.toList()).get(1).getKey();
+        System.out.println(i);
+
+        List<String> M=Arrays.asList("prasad","kumar");
+        System.out.println(M.stream().collect(Collectors.toMap(name->String.valueOf(name.charAt(0)).toUpperCase(),
+                name->name.substring(0,1).toUpperCase()+name.substring(1))));
+    }
+}
+==================================
+
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+public class ComparatorEx {
+    public static void main(String[] args) {
+        String S = "aaabbcaadddeeee";
+        char[] ch = S.toCharArray();
+        char currentChar = ch[0];
+        int count = 1;
+        StringBuffer SB = new StringBuffer();
+        for(int i=1;i<ch.length;i++){
+            if(ch[i]==ch[i-1]){
+                count++;
+            }else{
+                SB.append(currentChar).append(count);
+                currentChar = ch[i];
+                count = 1;
+            }
+        }
+        System.out.println(SB.append(currentChar).append(count));
+
+        String str = "Hello my name is xyz";
+        System.out.println(Stream.of(str.split(" ")).sorted(Comparator.reverseOrder()).collect(Collectors.joining(" ")));
+        String K = "swiss";
+        Character p =K.chars().mapToObj(i->(char)i).collect(Collectors.groupingBy(Function.identity(),Collectors.counting())).entrySet().stream()
+                .filter(k->k.getValue()==1)
+                .map(e->e.getKey())
+                .findFirst().get();
+        System.out.println(p);
+
+            }
+
+    }
+
+=============================
+
+
+import java.util.regex.Pattern;
+
+public class PasswordValidator {
+
+    // Regex to check valid password.
+    private static final String PASSWORD_PATTERN =
+            "^(?=.*[0-9])" +         // at least 1 digit
+                    "(?=.*[a-z])" +          // at least 1 lower case letter
+                    "(?=.*[A-Z])" +          // at least 1 upper case letter
+                    "(?=.*[@#$%^&+=!])" +    // at least 1 special character
+                    "(?=\\S+$).{8,}$";       // no whitespace and at least 8 characters
+
+    private static final Pattern pattern = Pattern.compile(PASSWORD_PATTERN);
+
+    public static boolean isValid(final String password) {
+        return pattern.matcher(password).matches();
+    }
+
+    public static void main(String[] args) {
+        String password1 = "Password@123";
+        String password2 = "password";
+
+        System.out.println("Password: " + password1 + " is " + (isValid(password1) ? "valid" : "invalid"));
+        System.out.println("Password: " + password2 + " is " + (isValid(password2) ? "valid" : "invalid"));
+    }
+}
+
+
+
+=========================
+
+package com.interview;
+
+public class Dummy {
+    public static void main(String[] args) {
+        String str = "Java123";
+        String str1 = "Java";
+        String str2 = "Kajavali";
+
+        Integer x=10,y=20;
+
+        System.out.println(str.compareTo(str1));
+        System.out.println(str2.compareTo(str));
+        System.out.println(str1.compareTo(str));
+        System.out.println(x.compareTo(y));
+
+        String S = "MADAMS";
+        int left=0,right=S.length()-1;
+        System.out.println(isPolyndro(left,right,S));
+        try {
+            int N = 1634;
+            String num = String.valueOf(N);
+            System.out.println(num.chars().map(Character::getNumericValue).map(n -> (int) Math.pow(n, num.length())).sum());
+        }finally {
+            System.out.println("Hello");
+        }
+
+    }
+
+    private static boolean isPolyndro(int left, int right, String s) {
+        while(left<right){
+            if(s.charAt(left++)!=s.charAt(right--)){
+                return false;
+            }
+        }
+        return true;
+    }
+}
+============================
+
+package com.interview;
+
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+public class Test {
+    public static void main(String[] args) {
+        int A = 5,B=7;
+        A = A+B;//12
+        B = A-B;//5
+        A = A-B;//7
+        System.out.println();
+
+        String S = "KAJAVALI";
+        //System.out.println(S.chars().mapToObj(c->(char)c).collect(Collectors.groupingBy(Function.identity(),Collectors.counting())).entrySet().stream().max(Map.Entry.comparingByValue()).get().getKey());
+        "MADAM".chars().mapToObj(c->(char)c).collect(Collectors.groupingBy(Function.identity(),Collectors.counting())).entrySet().stream().filter(e->e.getValue()==1).forEach(System.out::println);
+
+        Map<String,Integer> map = new HashMap<>();
+        map.put("Ka",1);
+        map.put("majs",5);
+        map.put("ury",10);
+        map.put("rtr",18);
+        map.put("lkh",11);
+
+        map.entrySet().stream().sorted(Map.Entry.comparingByValue()).forEach(System.out::println);
+
+        List<Map.Entry<String,Integer>> list = new ArrayList<>(map.entrySet());
+        list.sort(Map.Entry.comparingByValue());
+        LinkedHashMap<String ,Integer> order = new LinkedHashMap<>();
+        for(Map.Entry<String ,Integer> entry:list){
+            order.put(entry.getKey(),entry.getValue());
+        }
+
+        String K = "146523";
+
+        K.chars().map(Character::getNumericValue).forEach(n->{
+            Thread T = new Thread(()->{
+               // System.out.println(Thread.currentThread().getName()+":"+n);
+            });
+            T.setName("Thread-"+n);
+            T.start();
+        });
+
+        int[] C = {0,0,0,2,3,4,5};
+        int[] D = new int[C.length];
+        int i=0;
+        for(int n:C){
+            if(n!=0){
+                D[i] = n;
+                i++;
+            }
+
+        }
+        while(i<D.length){
+            D[i++] = 0;
+        }
+
+        for(int L:D){
+            System.out.print(L+" ");
+        }
+
+        //System.out.println(order);
+    }
+}
+
+
+===================================
+
+package com.interview;
+
+import java.security.cert.CollectionCertStoreParameters;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+public class Example {
+    public static void main(String[] args) {
+        int TotalTiks = 5;
+        List<Ticker> Tic = new ArrayList<>();
+        Tic.add(new Ticker("A","D"));
+        Tic.add(new Ticker("B","E"));
+        Tic.add(new Ticker("C","H"));
+        Tic.add(new Ticker("D","G"));
+        Tic.add(new Ticker("E","F"));
+        final char[] minLetter = {'Z'};
+        final char[] maxLetter = {'A'};
+        Tic.stream().forEach(T->{
+            if(T.start.charAt(0)< minLetter[0])
+                minLetter[0] = T.start.charAt(0);
+            if(T.start.charAt(0)> maxLetter[0])
+                maxLetter[0] = T.start.charAt(0);
+            if(T.end.charAt(0)< minLetter[0])
+                minLetter[0] = T.end.charAt(0);
+            if(T.end.charAt(0)> maxLetter[0])
+                maxLetter[0] = T.end.charAt(0);
+        });
+        /*for (Ticker ticker : Tic) {
+            if (ticker.start.charAt(0) < minLetter[0]) {
+                minLetter[0] = ticker.start.charAt(0);
+            }
+            if (ticker.start.charAt(0) > maxLetter[0]) {
+                maxLetter[0] = ticker.start.charAt(0);
+            }
+            if (ticker.end.charAt(0) < minLetter[0]) {
+                minLetter[0] = ticker.end.charAt(0);
+            }
+            if (ticker.end.charAt(0) > maxLetter[0]) {
+                maxLetter[0] = ticker.end.charAt(0);
+            }*/
+        //}
+
+        System.out.print("Starting from : " + minLetter[0]);
+        System.out.println(" To: " + maxLetter[0]);
+
+        String S = "KAJAVALI";
+        System.out.println(S.chars().mapToObj(c->(char)c).collect(Collectors.groupingBy(Function.identity(),Collectors.counting())).entrySet().stream().max(Map.Entry.comparingByValue()).get().getKey());
+        //System.out.println(IntStream.rangeClosed(1,S.length()).mapToObj(i->S.charAt(S.length()-i)).map(String::valueOf).collect(Collectors.joining()));
+        char[] ch = S.toCharArray();
+        int left=0,right=ch.length-1;
+        while (left<right){
+            char tmp = ch[left];
+            ch[left++] = ch[right];
+            ch[right--] = tmp;
+        }
+
+        //System.out.println(new String(ch));
+        String K = "00000003456";
+        int i=0;
+        while (i<K.length()&&K.charAt(i)=='0'){
+            i++;
+        }
+        StringBuffer SB = new StringBuffer(K);
+        SB.replace(0,i,"");
+        System.out.println(SB.toString());
+    }
+
+
+
+
+}
+
+class Ticker{
+    String start,end;
+
+    public String getStart() {
+        return start;
+    }
+
+    public void setStart(String start) {
+        this.start = start;
+    }
+
+    public String getEnd() {
+        return end;
+    }
+
+    public void setEnd(String end) {
+        this.end = end;
+    }
+
+    public Ticker(String start, String end) {
+        this.start = start;
+        this.end = end;
+    }
+}
+======================================
+
+package com;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+public class Employee1 {
+    private int id;
+    private String name;
+    private double salary;
+    private String department;
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getSalary() {
+        return salary;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public Employee1(int id, String name, double salary, String department) {
+        this.id = id;
+        this.name = name;
+        this.salary = salary;
+        this.department = department;
+    }
+
+    public static void main(String[] args) {
+        List<Employee1> employees = Arrays.asList(
+                new Employee1(1, "John", 5000.0, "HR"),
+                new Employee1(2, "Jane", 6000.0, "Finance"),
+                new Employee1(3, "Jack", 7000.0, "HR"),
+                new Employee1(4, "Jill", 8000.0, "Finance"),
+                new Employee1(5, "Joe", 9000.0, "IT")
+        );
+
+        Map<String, Double> averageSalaries = employees.stream().collect(Collectors.groupingBy(Employee1::getDepartment,Collectors.averagingDouble(Employee1::getSalary)));
+        averageSalaries.forEach((dept,avgsal)->System.out.println("DEPT:"+dept+" AVG:"+avgsal));
+
+        int[] nums = {1, 1, 0, 1, 1, 1, 0, 1, 1};
+        int result = longestSubarray(nums);
+        System.out.println("Longest subarray of 1's after deleting one element: " + result);
+
+        List<Integer> list =Arrays.asList(1,2,2,2,3,3,5,5,5,5);//Second highest repeat number
+        System.out.println(list.stream().collect(Collectors.groupingBy(Function.identity(),Collectors.counting())).entrySet()
+                .stream().sorted((e1,e2)-> e2.getValue().compareTo(e1.getValue())).collect(Collectors.toList()).get(1).getKey());
+
+        Map<Integer, Long> frequencyMap = list.stream()
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+        // Find the second highest frequency
+        List<Map.Entry<Integer, Long>> sortedFrequencies = frequencyMap.entrySet().stream()
+                .sorted((entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()))
+                .collect(Collectors.toList());
+
+        if (sortedFrequencies.size() < 2) {
+            System.out.println("Not enough distinct numbers to determine the second highest repeat number.");
+        } else {
+            int secondHighestRepeatNumber = sortedFrequencies.get(1).getKey();
+            System.out.println("Second highest repeat number: " + secondHighestRepeatNumber);
+        }
+    }
+
+    public static int longestSubarray(int[] nums) {
+        int left = 0;
+        int zerosCount = 0;
+        int maxLength = 0;
+
+        for (int right = 0; right < nums.length; right++) {
+            if (nums[right] == 0) {
+                zerosCount++;
+            }
+
+            while (zerosCount > 1) {
+                if (nums[left] == 0) {
+                    zerosCount--;
+                }
+                left++;
+            }
+
+            // Calculate the length of the current window
+            // Subtract 1 from the length because we need to delete one element
+            maxLength = Math.max(maxLength, right - left);
+        }
+
+        return maxLength;
+    }
+}
+
+
+======================================
+
+package com;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
+public class Employee {
+    private int id;
+    private String name;
+    private int salary;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getSalary() {
+        return salary;
+    }
+
+    public void setSalary(int salary) {
+        this.salary = salary;
+    }
+
+    public Employee(int id, String name, int salary) {
+        this.id = id;
+        this.name = name;
+        this.salary = salary;
+    }
+
+    public static void main(String[] args) {
+        List<Employee> employeeList = new ArrayList<>();
+        employeeList.add(new Employee(1,"abhi",20000));
+        employeeList.add(new Employee(4,"abhi",30000));
+        employeeList.add(new Employee(3,"abhi",40000));
+        employeeList.add(new Employee(6,"abhi",23000));
+
+        List<Employee> employeeList1 = new ArrayList<>();
+        employeeList1.add(new Employee(1, "abhi", 20000));
+        employeeList1.add(new Employee(4, "kinu", 30000));
+        employeeList1.add(new Employee(3, "chitra", 40000));
+        employeeList1.add(new Employee(6, "akshay", 23000));
+
+        employeeList1.stream().filter(emp->emp.getSalary()>23000).sorted(Comparator.comparing(e->e.getName().charAt(0))).forEach(emp->{
+            System.out.println(emp.getName()+":"+emp.getSalary());
+        });
+
+        employeeList1.stream().sorted(Comparator.comparing(c->c.getName().charAt(0))).forEach(emp->{
+            System.out.print(emp.getName()+" ");
+        });
+
+        /*System.out.println(employeeList.stream().map(Employee::getSalary)
+                        //.reduce(Integer::max).get());
+                .sorted(Comparator.reverseOrder())
+                .skip(1)
+                .findFirst()
+                .get());*/
+    }
+}
+
+
+==============================
+
+package com;
+
+
+import java.util.AbstractMap;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+public class PolyEx{
+    public static void main(String[] args) {
+        Map<Integer,String> map = new HashMap<>();
+        map.put(1,"A");
+        map.put(2,"B");
+        map.put(3,"C");
+        map.put(4,"D");
+
+        for(Map.Entry<Integer,String> entry:map.entrySet()){
+            //if(entry.getKey()==1)
+                //entry.setValue("F");
+        }
+
+        map = map.entrySet().stream().map(entry->entry.getKey()==1?new AbstractMap.SimpleEntry<>(entry.getKey(),"F"):entry)
+                        .collect(Collectors.toMap(Map.Entry::getKey,Map.Entry::getValue));
+        //map.forEach((k,v)->System.out.println(k+"="+v));
+        map.entrySet().stream().forEach(entry->System.out.println(entry.getKey()+"="+entry.getValue()));
+
+        //System.out.println(map);
+        String S = "swiss";
+        for(char c: S.toCharArray()){
+            if(S.indexOf(c)==S.lastIndexOf(c)){
+                System.out.println(c);
+                break;
+            }
+        }
+
+    }
+}
+
+
+=====================================
+
+package com;
+
+import com.interview.A;
+
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+public class Sample {
+    public static void main(String[] args) {
+        int[] Arr = {1,2,3,5};
+        int mis = 0;
+        int i=0;
+        while (i<Arr.length) {
+            if((Arr[i+1]-Arr[i])>1) {
+                mis = Arr[i]+1;
+                System.out.println(mis);
+                break;
+            }
+            i++;
+        }
+
+        List<String> list = Arrays.asList("ABC","HGDF","LKUI","KJHDFG");
+        Map<Integer,List<String>> map = list.stream().collect(Collectors.groupingBy(String::length));
+        System.out.println(map);
+
+        List<String> names = Arrays.asList("Alice", "Bob", "Charlie");
+        names.stream().peek(System.out::println).collect(Collectors.toList());
+        Optional<String> anyName = names.stream().findAny();
+        System.out.println(anyName);
+
+        String S = "ROTATOR";
+        String R = IntStream.rangeClosed(1,S.length()).mapToObj(j->S.charAt(S.length()-j)).map(String::valueOf).collect(Collectors.joining());
+        if(S.equals(R)){
+            System.out.println("Yes");
+        }else{
+            System.out.println("No");
+        }
+
+
+    }
+}
+
+
+==============================
+package com.today;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+public class Employee2 {
+    private int id;
+    private String name;
+    private String location;
+
+    public Employee2(int id, String name, String location) {
+        this.id = id;
+        this.name = name;
+        this.location = location;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee2{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", location='" + location + '\'' +
+                '}';
+    }
+
+    public static void main(String[] args) {
+        List<Employee2> list = new ArrayList<>();
+        list.add(new Employee2(1,"A","Hyd"));
+        list.add(new Employee2(2,"B","Bang"));
+        list.add(new Employee2(3,"C","Hyd"));
+        list.add(new Employee2(4,"D","Bang"));
+
+        list.stream().filter(f->"Hyd".equals(f.getLocation())).collect(Collectors.toList()).forEach(System.out::println);
+
+    }
+}
+
+
+====================================
+
+package com.today;
+
+
+public class Demo {
+    static class Node{
+        Node next,prev;
+        int data;
+        Node(int data){
+            this.data = data;
+            next=prev=null;
+        }
+    }
+
+    public static void print(Node head){
+        while (head != null){
+            System.out.print(head.data+" ");
+            head = head.next;
+        }
+        System.out.println();
+    }
+
+    public static Node reverse(Node curr){
+        if(curr == null)
+            return null;
+        Node temp = curr.prev;
+        curr.prev = curr.next;
+        curr.next = temp;
+
+        if(curr.prev==null)
+            return curr;
+        return reverse(curr.prev);
+    }
+
+    public static void main(String[] args) {
+        Node head = new Node(1);
+        head.next = new Node(2);
+        head.next.prev = head;
+        head.next.next = new Node(3);
+        head.next.next.prev = head.next;
+        head.next.next.next = new Node(4);
+        head.next.next.next.prev = head.next.next;
+
+        print(head);
+        head = reverse(head);
+        print(head);
+
+        Node head1 = new Node(11);
+        head1.next = new Node(22);
+        head1.next.next = new Node(32);
+        head1.next.next.next = new Node(44);
+
+        print(head1);
+        head1 = reverse1(head1);
+        print(head1);
+
+    }
+
+    private static Node reverse1(Node head1) {
+        Node curr = head1,prev=null,next;
+        while (curr !=null){
+            next = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = next;
+        }
+        return prev;
+    }
+}
+
+
+========================
+
+package com.today;
+
+public class SList {
+    static class Node{
+        Node next;
+        int data;
+        Node(int data){
+            this.data = data;
+        }
+    }
+
+    public static void main(String[] args) {
+        Node head = new Node(1);
+        head.next = new Node(2);
+        head.next.next = new Node(3);
+        head.next.next.next = new Node(4);
+
+        print(head);
+        Node node = reverse(head);
+        System.out.println();
+        print(node);
+    }
+
+    public static void print(Node head){
+        while (head!=null){
+            System.out.print(head.data+" ");
+            head = head.next;
+        }
+        System.out.println();
+    }
+
+    public static Node reverse(Node node){
+        Node curr = node,prev=null,next;
+        while (curr!=null){
+            next = curr.next;
+            curr.next = prev;
+
+            prev = curr;
+            curr = next;
+        }
+        return prev;
+    }
+}
+=============================
+
+package com.today;
+
+import java.util.*;
+
+class Student{
+     int id;
+     String Name;
+     List<Integer> deptIDS;
+
+    public Student(int id, String name, List<Integer> deptids) {
+        this.id = id;
+        Name = name;
+        this.deptIDS = deptids;
+    }
+}
+
+class Department {
+     int deptId;
+     String deptName;
+
+    public Department(int deptId, String deptName) {
+        this.deptId = deptId;
+        this.deptName = deptName;
+    }
+}
+public class StudentDepartmentDemo {
+    public static void main(String[] args) {
+
+
+        List<Student> studentList = new ArrayList<>();
+        List<Department> departmentList = new ArrayList<>();
+
+        // Sample data
+        studentList.add(new Student(1, "Alice", Arrays.asList(1, 2)));
+        studentList.add(new Student(2, "Bob", Arrays.asList(1)));
+        studentList.add(new Student(3, "Charlie", Arrays.asList(2, 3)));
+        studentList.add(new Student(4, "David", Arrays.asList(3)));
+        //studentList.add(new Student(5, "Eve", Arrays.asList(1, 3)));
+
+        departmentList.add(new Department(1, "Computer Science"));
+        departmentList.add(new Department(2, "Mathematics"));
+        departmentList.add(new Department(3, "Physics"));
+
+        Map<Integer,Integer> deptStudentCount = new HashMap<>();
+        for(Student student:studentList){
+            for(Integer deptid: student.deptIDS){
+                deptStudentCount.put(deptid,deptStudentCount.getOrDefault(deptid,0)+1);
+            }
+        }
+
+        List<Department> result = new ArrayList<>();
+        for(Department department: departmentList){
+            if(deptStudentCount.getOrDefault(department.deptId,0)>=2){
+                result.add(department);
+            }
+        }
+
+        for(Department d:result){
+            System.out.println(d.deptName);
+        }
+    }
+}
+================================
+
+package com.today;
+
+public class MainThreadExample {public static void main(String[] args) {
+    // Create custom threads T1 and T2
+    Thread T1 = new Thread(new CustomThread("T1"));
+    Thread T2 = new Thread(new CustomThread("T2"));
+
+    // Start the custom threads
+    T1.start();
+    T2.start();
+
+    try {
+        // Wait for T1 and T2 to finish
+        T1.join();
+        T2.join();
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    }
+
+    // Main thread starts after T1 and T2 have finished
+    System.out.println("Main thread starts after T1 and T2 have finished.");
+}
+}
+
+class CustomThread implements Runnable {
+    private String threadName;
+
+    public CustomThread(String threadName) {
+        this.threadName = threadName;
+    }
+
+    @Override
+    public void run() {
+        System.out.println(threadName + " is running.");
+        try {
+            // Simulate some work with sleep
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(threadName + " has finished.");
+    }
+}
+=============================================
+
+package com.tesco;
+
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+public class StringExample {
+    public static void main(String[] args) {
+        String input = "abcabcbb";
+        String result = findLongestNonRepeatedSubstring(input);
+        System.out.println("Longest substring with non-repeated characters: " + result);
+    }
+
+    public static String findLongestNonRepeatedSubstring(String s) {
+        int[] maxLength = {0};
+        int[] startIndexOfMax = {0};
+
+        IntStream.range(0, s.length()).forEach(start -> {
+            Set<Character> seenChars = new HashSet<>();
+            IntStream.range(start, s.length()).forEach(end -> {
+                char currentChar = s.charAt(end);
+                if (seenChars.contains(currentChar)) {
+                    return; // Break out of the inner loop
+                }
+                seenChars.add(currentChar);
+                if (end - start + 1 > maxLength[0]) {
+                    maxLength[0] = end - start + 1;
+                    startIndexOfMax[0] = start;
+                }
+            });
+        });
+
+        return s.substring(startIndexOfMax[0], startIndexOfMax[0] + maxLength[0]);
+    }
+}
+
+============================
+
+package com.test;
+
+
+import java.util.List;
+
+public class LinkedList {
+    Node head;
+
+    public void insert(int data){
+        Node node = new Node(data);
+        node.next = null;
+        if(head==null)
+            head = node;
+        else{
+            Node N = head;
+            while (N.next!=null){
+                N=N.next;
+            }
+            N.next = node;
+        }
+    }
+
+    public void insertStart(int data){
+        Node node = new Node(data);
+        node.next = null;
+        if(head==null)
+            head = node;
+        else{
+            node.next = head;
+            head = node;
+        }
+    }
+
+    public void insertAt(int index, int data){
+        Node node = new Node(data);
+        node.next = null;
+        if(index==0){
+            insertStart(data);
+        }else{
+            Node N = head;
+            for(int i=0;i<index-1;i++){
+                N = N.next;
+            }
+            node.next = N.next;
+            N.next = node;
+        }
+    }
+
+    public void deleteAt(int index){
+        if(index==0){
+            head = head.next;
+        }else {
+            Node N = head;
+            Node n1 = null;
+            for (int i = 0; i < index - 1; i++) {
+                N = N.next;
+            }
+            n1 = N.next;
+            N.next = n1.next;
+        }
+    }
+
+    public void show(){
+        Node n = head;
+        while(n.next!=null){
+            System.out.print(n.data+" ");
+            n = n.next;
+        }
+        System.out.print(n.data);
+    }
+
+    public void reverse(){
+        Node curr = head,prev=null,next;
+        while (curr != null){
+            next = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = next;
+        }
+        while (prev!=null){
+            System.out.print(prev.data+" ");
+            prev = prev.next;
+        }
+    }
+
+    public static void main(String[] args) {
+        LinkedList list = new LinkedList();
+        list.insert(1);
+        list.insert(2);
+        list.insert(3);
+        list.insert(4);
+        list.insert(5);
+        list.show();
+        //list.insertStart(10);
+        //System.out.println();
+        //list.show();
+        //list.insertAt(3,90);
+        //System.out.println();
+        //list.show();
+        //list.deleteAt(2);
+        System.out.println();
+        //list.show();
+        list.reverse();
+    }
+}
+
+
+===================
+
+
+package com.test;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+public class Practice implements Runnable{
+    private static int MAX = 15;
+    private static AtomicInteger counter = new AtomicInteger(0);
+    private int threadId;
+    private int totalThreads;
+
+    public Practice(int threadId, int totalThreads) {
+        this.threadId = threadId;
+        this.totalThreads = totalThreads;
+    }
+
+    public static void main(String[] args) {
+        int a=0,b=1,next;
+        for(int i=0;i<20;i++){
+            //System.out.print(a+" ");
+            next = a+b;
+            a = b;
+            b = next;
+        }
+
+        String S = "KAJAVALI";
+        //System.out.println(IntStream.rangeClosed(1,S.length()).mapToObj(i->S.charAt(S.length()-i)).map(String::valueOf).collect(Collectors.joining()));
+
+        int N = 1634;
+        String num = String.valueOf(N);
+        int M = num.chars().map(Character::getNumericValue).map(i->(int)Math.pow(i,num.length())).sum();
+        //if(N==M)
+            //System.out.println("AMSTRONG");
+        //else
+            //System.out.println("NON AMSTRONG");
+
+        int[] A = {1,5,3,7,2,6,4,2};
+        //System.out.println(Arrays.stream(A).reduce(Integer::sum).getAsInt());
+        //System.out.println(Arrays.stream(A).reduce(Integer::min).getAsInt());
+        //System.out.println(Arrays.stream(A).reduce(Integer::max).getAsInt());
+        //Arrays.stream(A).sorted().forEach(System.out::print);
+        //System.out.println();
+        //Arrays.stream(A).boxed().sorted(Comparator.reverseOrder()).forEach(System.out::print);
+
+        int start=2,end=20;
+        for(int i=start;i<=end;i++){
+            if(isPrimeNum(i)){
+                //System.out.print(i+" ");
+            }
+        }
+
+        ExecutorService ES = Executors.newFixedThreadPool(3);
+        for(int i=0;i<3;i++){
+            ES.submit(new Practice(i,3));
+        }
+        ES.shutdown();
+
+
+        List<Integer> list = new ArrayList<>(Arrays.asList(1,2,3,4,5,6,7,8,2,4,5,6));
+        //list.stream().filter(i->i%2==0).forEach(System.out::println);
+        //list.stream().distinct().forEach(System.out::println);
+        S.chars().mapToObj(c->(char)c).collect(Collectors.groupingBy(Function.identity(),Collectors.counting())).entrySet().stream().forEach(enttry->{
+            //System.out.println(enttry.toString());
+        });
+
+        Arrays.stream(A).boxed().collect(Collectors.groupingBy(Function.identity(),Collectors.counting())).entrySet().stream().forEach(entry->{
+            //System.out.println(entry.toString());
+        });
+
+        //list.stream().sorted(Comparator.reverseOrder()).forEach(System.out::println);
+        System.out.println(list.stream().reduce(Integer::max).get());
+
+    }
+
+    private static boolean isPrimeNum(int num) {
+        if(num<=1)
+            return false;
+        return IntStream.rangeClosed(2,(int)Math.sqrt(num)).noneMatch(d->num%d==0);
+    }
+
+
+    @Override
+    public void run() {
+        while(true){
+            synchronized (counter){
+                if(counter.get()>MAX)
+                    break;
+                if(counter.get()%totalThreads==threadId){
+                    //System.out.println("Thread-"+(threadId+1)+":"+(counter.getAndIncrement()+1));
+                    counter.notifyAll();
+                }else{
+                    try {
+                        counter.wait();
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        }
+
+    }
+}
+
+
+============================
+
+package com.test;
+
+public class Queue {
+    private int front,rear,size;
+    private int[] Q = new int[5];
+
+    public void enqueue(int data){
+        if(isFull()) {
+            System.out.println("Queue is full");
+            return;
+        }
+        Q[rear] = data;
+        rear = (rear+1)%5;
+        size++;
+    }
+
+    public void dqueue(){
+        int data = Q[front];
+        if(isEmpty())
+            System.out.println("Queue is empty");
+        else{
+            front = (front+1)%5;
+            size--;
+        }
+        System.out.println(data);
+    }
+
+    public boolean isFull(){
+        return size==5;
+    }
+
+    public boolean isEmpty(){
+        return size==0;
+    }
+
+    public int size(){
+        return size;
+    }
+
+    public void show(){
+        for(int i=0;i<size;i++){
+            System.out.print(Q[(front+i)%5]+" ");
+        }
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        Queue Q = new Queue();
+        Q.enqueue(1);
+        Q.enqueue(2);
+        Q.enqueue(3);
+        Q.enqueue(4);
+        Q.enqueue(5);
+        Q.dqueue();
+        Q.enqueue(6);
+        Q.show();
+    }
+}
+
+
+======================
+
+package com.test;
+
+class Node{
+    Node left,right,next;
+    int data;
+
+    public Node(int data) {
+        this.data = data;
+    }
+}
+public class Tree {
+    Node root;
+    public void insert(int data){
+        root = insertRec(root, data);
+    }
+
+    private Node insertRec(Node root, int data) {
+        if(root==null)
+            root = new Node(data);
+        else if(data<root.data)
+            root.left = insertRec(root.left,data);
+        else if(data>root.data)
+            root.right = insertRec(root.right,data);
+        return root;
+    }
+
+    public void inorder(){
+        inorderRec(root);
+        System.out.println();
+        preorderRec(root);
+        System.out.println();
+        postorderRec(root);
+    }
+
+    private void inorderRec(Node root) {
+        if(root!=null){
+            inorderRec(root.left);
+            System.out.print(root.data+" ");
+            inorderRec(root.right);
+        }
+    }
+
+    private void preorderRec(Node root) {
+        if(root!=null){
+            System.out.print(root.data+" ");
+            preorderRec(root.left);
+            preorderRec(root.right);
+        }
+    }
+
+    private void postorderRec(Node root) {
+        if(root!=null){
+            postorderRec(root.left);
+            postorderRec(root.right);
+            System.out.print(root.data+" ");
+        }
+    }
+
+    public static void main(String[] args) {
+        Tree T = new Tree();
+        T.insert(10);
+        T.insert(12);
+        T.insert(6);
+        T.insert(8);
+        T.insert(11);
+        T.insert(19);
+
+        T.inorder();
+
+
+
+
+    }
+}
+
+
+=============================
+
+package com.test;
+
+import com.sun.org.apache.xml.internal.serialize.LineSeparator;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.IntStream;
+
+public class Test implements Runnable
+{
+    private static int MAX =15;
+    private static AtomicInteger counter = new AtomicInteger(0);
+    private int threadId;
+    private int totalThreads;
+
+    public Test(int threadId, int totalThreads) {
+        this.threadId = threadId;
+        this.totalThreads = totalThreads;
+    }
+
+    public static void main(String[] args) {
+        int N = 1634;
+        //System.out.println(String.valueOf(N).chars().map(Character::getNumericValue).map(d->(int)Math.pow(d,String.valueOf(N).length())).sum());
+        int start=2;
+        int end=50;
+        for(int i=start;i<end;i++){
+            if(isPrime(i)){
+                //System.out.print(i+" ");
+            }
+        }
+
+        ExecutorService ES = Executors.newFixedThreadPool(3);
+        for(int i=0;i<3;i++){
+            ES.submit(new Test(i,3));
+        }
+        ES.shutdown();
+    }
+
+    private static boolean isPrime(int i) {
+        if(i<=1)
+            return false;
+        else{
+            return IntStream.rangeClosed(2,(int)Math.sqrt(i))
+                    .noneMatch(d->i%d==0);
+        }
+    }
+
+    @Override
+    public void run() {
+        while (true){
+            synchronized (counter){
+                if(counter.get()>=MAX)
+                    break;
+                if(counter.get()%totalThreads==threadId){
+                    System.out.println("Thread-"+(threadId+1)+":"+(counter.getAndIncrement()+1));
+                    counter.notifyAll();
+                }else{
+                    try {
+                        counter.wait();
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+================================
+
+package com;
+
+import java.util.Arrays;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+public class ReduceExample {
+    public static void main(String[] args) {
+        int[] A = {1, 2, 3, 5, 67, 8};
+        //Arrays.stream(A).map(m->m*10).forEach(System.out::println);
+        String S = "KAJAVALI";
+        System.out.println(S.chars().mapToObj(c->(char)c).collect(Collectors.groupingBy(Function.identity(),Collectors.counting())).entrySet().stream().max(Map.Entry.comparingByValue()).get().getKey());
+
+        System.out.println(IntStream.rangeClosed(1,S.length()).mapToObj(i->S.charAt(S.length()-i)).map(String::valueOf).collect(Collectors.joining()));
+        int[] Rev = IntStream.rangeClosed(1,A.length).map(i->A[A.length-i]).toArray();
+        for(int n:Rev){
+            System.out.print(n+" ");
+        }
+    }
+}
+
+
+
+==================
+
+package com.kaja.string;
+
+import java.util.Arrays;
+import java.util.Map;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
+public class StringProg {
+    public static void main(String[] args) {
+        String S = "KAJAVALI";
+        String Rev = IntStream.rangeClosed(1,S.length()).mapToObj(i->S.charAt(S.length()-i)).map(String::valueOf).collect(Collectors.joining());
+        //System.out.println(Rev);
+
+        //Most repeated letter
+        System.out.println(S.chars().mapToObj(c->(char)c).collect(Collectors.groupingBy(Function.identity(),Collectors.counting()))
+                .entrySet().stream().max(Map.Entry.comparingByValue()).get().getKey());
+
+        //Anagram
+        String A = "MDAMA";
+        String B = "MMADA";
+
+        A = Stream.of(A.split("")).map(String::toUpperCase).sorted().collect(Collectors.joining(""));
+        B = Stream.of(B.split("")).map(String::toUpperCase).sorted().collect(Collectors.joining(""));
+
+        if(A.equals(B))
+            System.out.println("ANAGRAM");
+        else
+            System.out.println("NON ANAGRAM");
+
+        //Amstrong Number
+        int X = 16341;
+        String num = String.valueOf(X);
+        int Y = num.chars().map(Character::getNumericValue).map(i->(int)Math.pow(i,num.length())).sum();
+        if(X==Y)
+            System.out.println("AMSTRONG");
+        else
+            System.out.println("NON AMSTRONG");
+        Lock lock = new ReentrantLock();
+        lock.lock();
+        lock.unlock();
+        //substrings of a string
+        for(int i=0;i<S.length();i++){
+            for(int j=i+1;j<=S.length();j++){
+                System.out.print(S.substring(i,j)+" ");
+            }
+        }
+        System.out.println();
+        //polyndrom
+        System.out.println(isPolyndrom("MADAM"));
+
+        String C = "5";
+        System.out.println(C.matches("\\d+"));
+
+        String D = "0000004565465";
+        int i=0;
+        while(i<D.length() && D.charAt(i)=='0')
+            i++;
+        StringBuffer SB = new StringBuffer(D);
+        SB.replace(0,i,"");
+        System.out.println(SB.toString());
+
+        char[] ch = S.toCharArray();
+        for(int h=0;h<ch.length;h+=2){
+            char tmp = ch[h];
+            ch[h] = ch[h+1];
+            ch[h+1] = tmp;
+        }
+        System.out.println(new String(ch));
+
+        String U = "hk kjhj yur hgsd";
+        System.out.println(Stream.of(U.split(" ")).map(w->new StringBuffer(w).reverse()).collect(Collectors.joining(" ")));
+    }
+
+    private static boolean isPolyndrom(String s) {
+        int left=0,right=s.length()-1;
+        while (left<right){
+            if(s.charAt(left++) != s.charAt(right--))
+                return false;
+        }
+        return true;
+    }
+
+
+}
+
+
+==============================================
+
+package com.kaja.string;
+
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
+
+public class ThreadPool implements Runnable{
+    private static int MAX=15;
+    private static AtomicInteger counter = new AtomicInteger(0);
+    private int threadId;
+    private int totalThreads;
+
+    public ThreadPool(int threadId, int totalThreads) {
+        this.threadId = threadId;
+        this.totalThreads = totalThreads;
+    }
+
+    @Override
+    public void run() {
+        while (true){
+            synchronized (counter){
+                if(counter.get()>MAX)
+                    break;
+                if(counter.get()%totalThreads==threadId){
+                    System.out.println("Thread-"+(threadId+1)+":"+(counter.getAndIncrement()+1));
+                    counter.notifyAll();
+                }else{
+                    try {
+                        counter.wait();
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        ExecutorService ES = Executors.newFixedThreadPool(3);
+        for(int i=0;i<3;i++){
+            ES.submit(new ThreadPool(i,3));
+        }
+        ES.shutdown();
+    }
+}
+
+
+=======================
+
+package com.kaja.string;
+
+public class NumLetExample {
+    private static final int MAX = 10;
+    private static final Object lock = new Object();
+    private static boolean isNum = true;
+    private static int count = 0;
+
+    public static void main(String[] args) {
+        Thread T1 = new Thread(new NumT());
+        Thread T2 = new Thread(new LetT());
+
+        T1.start();
+        T2.start();
+    }
+
+    static class NumT implements Runnable{
+
+        @Override
+        public void run() {
+            for(int i=1;i<=MAX;i++){
+                synchronized (lock){
+                    while (!isNum){
+                        try {
+                            lock.wait();
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                        }
+                    }
+                    System.out.print(i+" ");
+                    count=i;
+                    isNum = false;
+                    lock.notifyAll();
+                }
+            }
+        }
+    }
+
+    static class LetT implements Runnable{
+
+        @Override
+        public void run() {
+            for (char c = 'A';c<='A'+MAX;c++){
+                synchronized (lock){
+                    while (isNum){
+                        try {
+                            lock.wait();
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                        }
+                    }
+                    while (count>0){
+                        System.out.print(c+" ");
+                        count--;
+                    }
+                    System.out.println();
+                    count=0;
+                    isNum = true;
+                    lock.notifyAll();
+                }
+            }
+        }
+    }
+}
+
+
+=====================
+
+package com.kaja.string;
+
+public class PrintLetNum {
+    private static String S = "1A2B3Ca4D";
+    private static final Object lock = new Object();
+    private static int index = 0;
+
+    public static void main(String[] args) {
+        Thread Num = new Thread(new Number(),"NumThread");
+        Thread Let = new Thread(new Letter(),"LetThread");
+
+        Num.start();
+        Let.start();
+    }
+
+    static class Number implements Runnable{
+
+        @Override
+        public void run() {
+            while (true){
+                synchronized (lock){
+                    if(index>=S.length())
+                        break;
+                    char c = S.charAt(index);
+                    if(Character.isDigit(c)){
+                        System.out.println(Thread.currentThread().getName()+":"+c);
+                        index++;
+                        lock.notifyAll();
+                    }else{
+                        try {
+                            lock.wait();
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    static class Letter implements Runnable{
+
+        @Override
+        public void run() {
+            while (true){
+                synchronized (lock){
+                    if (index>=S.length())
+                        break;
+                    char c = S.charAt(index);
+                    if(Character.isLetter(c)){
+                        System.out.println(Thread.currentThread().getName()+":"+c);
+                        index++;
+                        lock.notifyAll();
+                    }else {
+                        try {
+                            lock.wait();
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+==========================
+
+package com.kaja.string;
+
+public class PrintLetterAndNumber {
+    private static final int MAX = 26;
+    private static final Object lock = new Object();
+    private static boolean isNum = true;
+
+    public static void main(String[] args) {
+        Thread Number = new Thread(new Number());
+        Thread Letter = new Thread(new Letter());
+
+        Number.start();
+        Letter.start();
+    }
+
+    static class Number implements Runnable{
+
+        @Override
+        public void run() {
+            for (int i=1; i<=MAX;i++){
+                synchronized (lock){
+                    while (!isNum){
+                        try {
+                            lock.wait();
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                        }
+                    }
+                    System.out.print(i);
+                    isNum = false;
+                    lock.notifyAll();
+                }
+            }
+        }
+    }
+
+    static class Letter implements Runnable{
+
+        @Override
+        public void run() {
+            for (char c='A';c<='A'+MAX;c++){
+                synchronized (lock){
+                    while (isNum){
+                        try {
+                            lock.wait();
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                        }
+                    }
+                    System.out.print(c);
+                    isNum = true;
+                    lock.notifyAll();
+                }
+            }
+        }
+    }
+}
+
+
+============================
+
+package com.kaja.string;
+
+public class PrintEvenOddNumbers {
+    private static final int MAX = 20;
+    private static final Object lock = new Object();
+    private static boolean isOdd = true;
+
+    public static void main(String[] args) {
+        Thread odd = new Thread(new OddNum(),"Odd");
+        Thread Even = new Thread(new EvenNum(),"Even");
+
+        odd.start();
+        Even.start();
+    }
+
+    static class OddNum implements Runnable{
+
+        @Override
+        public void run() {
+            for(int i=1;i<=MAX;i+=2){
+                synchronized (lock){
+                    while (!isOdd){
+                        try {
+                            lock.wait();
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                        }
+                    }
+                    System.out.println(Thread.currentThread().getName()+":"+i);
+                    isOdd = false;
+                    lock.notifyAll();
+                }
+            }
+        }
+    }
+
+    static class EvenNum implements Runnable{
+
+        @Override
+        public void run() {
+            for (int i=2;i<=MAX;i+=2){
+                synchronized (lock){
+                    while (isOdd){
+                        try {
+                            lock.wait();
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                        }
+                    }
+                    System.out.println(Thread.currentThread().getName()+":"+i);
+                    isOdd = true;
+                    lock.notifyAll();
+                }
+            }
+        }
+    }
+}
+
+
+==========================
+
+package com.kaja.string;
+
+import java.util.stream.IntStream;
+
+public class PrimeNumbers {
+    public static void main(String[] args) {
+        int start=2,end=20;
+        for(int i=start;i<=end;i++){
+            if(isPrimeNumber(i))
+                System.out.print(i+" ");
+        }
+    }
+
+    private static boolean isPrimeNumber(int n) {
+        if(n<=1)
+            return false;
+        return IntStream.rangeClosed(2,(int)Math.sqrt(n)).noneMatch(d->n%d==0);
+    }
+}
+==================
+
+package com.kaja.string;
+
+import java.util.*;
+import java.util.stream.IntStream;
+
+public class ArraysProg {
+    public static void main(String[] args) {
+        int[] A = {1,2,4,5,6,3,10,8,7};
+        //RevArray
+        int[] RevArray = IntStream.rangeClosed(1,A.length).map(i->A[A.length-i]).toArray();
+        for(int n: RevArray)
+            System.out.print(n+" ");
+        System.out.println();
+
+        //ArraySort
+        int[] ArraySort = Arrays.stream(A).sorted().toArray();
+        for(int n:ArraySort)
+            System.out.print(n+" ");
+        System.out.println();
+        //Min and Max in Array
+        System.out.println("MAX:"+Arrays.stream(A).reduce(Integer::max).getAsInt());
+        System.out.println("MIX:"+Arrays.stream(A).reduce(Integer::min).getAsInt());
+        System.out.println("SUM:"+Arrays.stream(A).reduce(Integer::sum).getAsInt());
+        System.out.println("AVG:"+Arrays.stream(A).average().getAsDouble());
+
+        int[] B = {1,2,3,1,2,5,1,2,8,9};
+        Map<Integer,Integer> map = new HashMap<>();
+        List<Integer> repeatNum = new ArrayList<>();
+
+        for(int x:B){
+            map.put(x,map.getOrDefault(x,0)+1);
+        }
+        for(int n:B){
+            if(map.get(n)>1)
+                repeatNum.add(n);
+        }
+        Collections.sort(repeatNum);
+        int[] arr = new int[B.length];
+        int index=0;
+        for(int i=0;i<B.length;i++){
+            if(map.get(i)>1){
+                arr[i] = map.get(index++);
+            }
+        }
+
+        for(int y:arr)
+            System.out.print(y+" ");
+    }
+}

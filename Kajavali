@@ -301,13 +301,13 @@
  36. List<Student> studentList = new ArrayList<Student>();
      List<Department> departmentList = new ArrayList<Department>();
      class Student {
-     	Integer id;
-     	String name ;
-     	List<Integer> deptIds;
+        Integer id;
+        String name ;
+        List<Integer> deptIds;
      }
      class Department {
      Integer departmentId;
-     	String deptName;
+        String deptName;
      }
      // All the departments with atleast two students
 
@@ -392,7 +392,7 @@
     Use TCP: When you need reliability, ordered delivery, and connection-oriented communication.
     Use UDP: When you need speed, low latency, and can tolerate some data loss.
 
- 50. if microservice sends same request to other what will happen?
+ 50. if microservice sends same request multiple times to other what will happen?
     1. Idempotent Operations
     If the receiving microservice's operation is idempotent, sending the same request multiple times will have the same effect as sending it once. Idempotent operations ensure that repeated requests do not cause unintended side effects.
     Example: Updating a user's profile information. If the same update request is sent multiple times, the user's profile will be updated to the same state each time.
@@ -553,9 +553,320 @@
         @Min(value = 18, message = "Age should not be less than 18")
         private int age;
 
+ 61. Mobile Networking
+    Mobile Device → BTS/RBS → RNC → Core Network (MSC/SGSN/GGSN) → Backhaul Network → External Networks
 
+ 62. What is the difference between Virtual DOM and Real DOM in React
+ 63. Advantage of ReactJs
+ 64. what is the diff between props and state in React
+ 65. What is context API
+ 66. what is useEffect
+ 67. Which case we prefor scope: prototype
+ 68. How do we knew a Springboot application is a microservice
+    @EnableEurekaClient
+    public class Application {
+        public static void main(String[] args) {
+            SpringApplication.run(Application.class, args);
+        }
+    }
+    or
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-gateway</artifactId>
+    </dependency>
+    or
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-openfeign</artifactId>
+    </dependency>
+    or
+    @EnableCircuitBreaker
+    public class Application {
+        public static void main(String[] args) {
+            SpringApplication.run(Application.class, args);
+        }
+    }
+    or
+    @EnableConfigServer
+    public class ConfigServerApplication {
+        public static void main(String[] args) {
+            SpringApplication.run(ConfigServerApplication.class, args);
+        }
+    }
 
+ 69. How to define compositeKey in @Entity class
+ 70. What are the code review tools available >
+    SonarQube,Jerrit(git), PVS Studio,Upsource
 
+ 71. @OneToOne in springboot
 
+     @Entity
+     public class User {
+         @Id
+         @GeneratedValue(strategy = GenerationType.IDENTITY)
+         private Long id;
+         private String username;
+
+         @OneToOne(cascade = CascadeType.ALL)
+         @JoinColumn(name = "profile_id", referencedColumnName = "id")
+         private Profile profile;
+     }
+
+     @Entity
+     public class Profile {
+         @Id
+         @GeneratedValue(strategy = GenerationType.IDENTITY)
+         private Long id;
+         private String firstName;
+         private String lastName;
+
+         @OneToOne(mappedBy = "profile")
+         private User user;
+
+         // Constructors, getters, and setters
+     }
+
+ 72. @OneToMany mapping in springboot
+
+     @Entity
+     public class Author {
+         @Id
+         @GeneratedValue(strategy = GenerationType.IDENTITY)
+         private Long id;
+         private String name;
+
+         @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
+         private List<Book> books = new ArrayList<>();
+
+         // Constructors, getters, and setters
+     }
+
+     @Entity
+     public class Book {
+         @Id
+         @GeneratedValue(strategy = GenerationType.IDENTITY)
+         private Long id;
+         private String title;
+
+         @ManyToOne
+         @JoinColumn(name = "author_id")
+         private Author author;
+
+         // Constructors, getters, and setters
+     }
+
+ 73. @ManyToMany mapping in Springboot
+    @Entity
+    public class Student {
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private Long id;
+        private String name;
+
+        @ManyToMany
+        @JoinTable(
+            name = "student_course",
+            joinColumns = @JoinColumn(name = "student_id"),
+            inverseJoinColumns = @JoinColumn(name = "course_id")
+        )
+        private Set<Course> courses = new HashSet<>();
+
+        // Constructors, getters, and setters
+    }
+
+    @Entity
+    public class Course {
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private Long id;
+        private String name;
+
+        @ManyToMany(mappedBy = "courses")
+        private Set<Student> students = new HashSet<>();
+
+        // Constructors, getters, and setters
+    }
+
+ 74. Frequently used kubctl commands
+     kubectl cluster-info
+        Kubernetes master is running at https://<master-ip>:<port>
+        KubeDNS is running at https://<dns-ip>:<port>/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+        To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
+
+        KubeDNS is a DNS server for a Kubernetes cluster.
+        It is responsible for providing DNS-based service discovery and name resolution for the cluster.
+
+     kubectl get nodes
+        NAME           STATUS    ROLES     AGE       VERSION
+        node-1         Ready     <none>    10d       v1.20.2
+        node-2         Ready     <none>    10d       v1.20.2
+        node-3         NotReady  <none>    10d       v1.20.2
+
+        # Label a node as a master node
+        kubectl label node master-node node-role.kubernetes.io/master=
+
+        # Taint the master node to prevent workloads
+        kubectl taint nodes master-node node-role.kubernetes.io/master=:NoSchedule
+
+        # Label a node as a worker node
+        kubectl label node worker-node node-role.kubernetes.io/worker=
+
+        # Remove any taints from the worker node
+        kubectl taint nodes worker-node node-role.kubernetes.io/worker:NoSchedule-
+
+     kubectl get pods
+        NAME                      READY   STATUS    RESTARTS   AGE
+        nginx-deployment-6f7bd9d8b4-4g9xz   1/1     Running   0         2h
+        nginx-deployment-6f7bd9d8b4-7jmtx   1/1     Running   0         2h
+
+        kubectl describe pod nginx-deployment-6f7bd9d8b4-4g9xz (Specific)
+
+     kubectl describe pod <pod-name>
+     kubectl get services
+        NAME         TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
+        kubernetes   ClusterIP   10.96.0.1      <none>        443/TCP        10d
+        my-service   NodePort    10.96.0.2      <none>        8080:30001/TCP 5d
+
+        TYPE: The type of the service (e.g., ClusterIP, NodePort, LoadBalancer)
+        kubectl describe service my-service
+
+     kubectl create -f <filename>
+        Sure! The kubectl create -f <filename> command is used
+        to create resources (such as pods, services, deployments, etc.) from a YAML or JSON file.
+
+        kubectl create -f deployment.yaml
+        O/P: deployment.apps/nginx-deployment created
+        kubectl get deployments
+        NAME              READY   UP-TO-DATE   AVAILABLE   AGE
+        nginx-deployment  3/3     3            3           1m
+
+     kubectl delete -f <filename>
+        kubectl delete -f deployment.yaml
+
+     kubectl apply -f <filename>
+     kubectl scale deployment <deployment-name> --replicas=<number-of-replicas>
+
+     kubectl logs <pod-name>
+        kubectl logs my-pod
+
+     kubectl exec -it <pod-name> -- /bin/bash
+        kubectl exec -it my-pod -- /bin/bash
+
+     kubectl port-forward <pod-name> <local-port>:<pod-port>
+        kubectl port-forward my-pod 8080:80
+
+     kubectl config set-context --current --namespace=<namespace>
+     kubectl get all
+        kubectl get all --all-namespaces
+
+     kubectl delete pod -l <label-key>=<label-value>
+        kubectl delete pod -l app=my-app
+
+ 75. What is N+1 problen in hibernate
+    The N+1 problem is a performance issue that arises in object-relational mapping frameworks
+    like Hibernate when retrieving associated entities. This problem occurs when an application
+    makes one query to retrieve a list of parent entities (the "1" query), and for each parent entity,
+     it makes an additional query to retrieve the associated child entities (the "N" queries).
+     This results in a total of 1 + N queries, which can significantly degrade performance,
+     especially with large datasets.
+
+     @Entity
+     public class Author {
+         @Id
+         private Long id;
+
+         @OneToMany(mappedBy = "author")
+         private List<Book> books;
+
+         // Getters and setters
+     }
+
+     @Entity
+     public class Book {
+         @Id
+         private Long id;
+
+         @ManyToOne
+         @JoinColumn(name = "author_id")
+         private Author author;
+
+         // Getters and setters
+     }
+   //
+   List<Author> authors = entityManager.createQuery("SELECT a FROM Author a", Author.class).getResultList();
+   for (Author author : authors) {
+       List<Book> books = author.getBooks(); // Triggers a separate query for each author
+   }
+
+   Solution: FETCH JOIN
+        List<Author> authors = entityManager.createQuery(
+            "SELECT a FROM Author a JOIN FETCH a.books", Author.class).getResultList();
+
+ 76. How to create EntityManager Object in springboot
+
+        @Service
+        public class MyService {
+
+            @PersistenceContext
+            private EntityManager entityManager;
+
+            @Transactional
+            public void performSomeOperation() {
+                // Use the entityManager for database operations
+                // Example: entityManager.find(SomeEntity.class, id);
+            }
+        }
+
+ 77. How to handle large data in springboot application
+
+ 78. What is the diff between get() and load() in hibernate
+     get() will immediately query the database and return the entity or null if it doesn't exist.
+     load() will return a proxy object and only query the database when a method is called on the proxy.
+     If the entity doesn't exist, it will throw an ObjectNotFoundException.
+
+ 79. List = {1,2,3,4,5} output = {1,3,6,10,15}
+ 80. list = {1,2,3,4,5,6} multiply all the elements in java 8
+        list.stream().reduce(1,(a,b)->a*b)
+ 81. Docker commands:
+        docker save -o   <output_file_name>.tar    <image_name> //import
+        docker load -i <output_file_name>.tar //export
+        docker rm <container-id> //removal
+        //container running,paused,stopped
+        docker ps -q | wc -l
+        docker ps -q -f "status=paused"
+        docker ps -q -aq -f "status=exited"
+
+        //start , stop, kill
+        docker start <container>
+        docker stop <container>
+        docker kill <container>
+
+        docker logs <container_id>
+        docker run --restart //container restarts itself
+
+        docker run
+        docker ps
+        docker exec
+        docker stop
+
+        docker version //to know Docker client and server versions
+        docker system prune //used to removal of unused data inclusion of stopped containers ,docker networks and
+
+        docker-compose up --scale web=3 // will replecate web service in 3 instances
+
+        docker run --restart no my_container // never restart
+        docker run --restart on-failure:3 my_container //after 3 failures it will re-start
+        docker run --restart always my_container
+
+        docker inspect <image> //inspect meta-data
+
+        docker run --cpus=3 -m  1024M   <image_name>
+
+        docker exec -it <container_id> /bin/bash //
+        docker exec -it <container_id> ps aux //running processes inside container
+        docker exec -it <container_id> ping <hostname> //network connectivity to the host
+        docker stats <containerID> //resource utilization
+
+ 82. String[] array = {"apple", "banana", "cherry", "date"}; sort based on length
 
  https://www.youtube.com/watch?v=aZA1m-CG9TY
